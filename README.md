@@ -1,2 +1,2 @@
 # bidbuysell
-E-bidding platform
+E-bidding Platform
