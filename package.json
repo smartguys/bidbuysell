@@ -1,0 +1,19 @@
+{
+  "name": "bidbuysell",
+  "version": "1.0.0",
+  "description": "E-bidding Platform",
+  "main": "json_gen.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartguys/bidbuysell.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smartguys/bidbuysell/issues"
+  },
+  "homepage": "https://github.com/smartguys/bidbuysell#readme"
+}
