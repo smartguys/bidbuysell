@@ -8,11 +8,11 @@ Make sure you have node installed
 1. Clone repository
 2. Install json-server
 ```
-$ npm install
+$ npm install json-server
 ```
 3. Use json_gen.js file to run:
 ```
-$ json-server json_gen.js
+$ npx json-server json_gen.js
 ```
 4. Open browser
 ```
