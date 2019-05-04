@@ -1,6 +1,6 @@
 const request = require('request');
 
-const base_url = 'http://localhost:3000/';
+const base_url = 'http://localhost:8080/';
 
 function sendRequest(options, callback){
     request(options, 

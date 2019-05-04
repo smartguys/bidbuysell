@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./sessiontest/sessiontest.js",
-    "dev": "concurrently \"npm run start\" \"npm --prefix ./sessiontest/client run start\""
+    "dev": "concurrently \"npm run start\" \"npm --prefix ./sessiontest/client run start\" \"json-server --watch json_gen_relationships_mod.js\""
   },
   "repository": {
     "type": "git",

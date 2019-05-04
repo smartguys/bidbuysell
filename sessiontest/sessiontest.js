@@ -3,22 +3,52 @@ const bodyParser = require('body-parser');
 let jwt = require('jsonwebtoken');
 let config = require('./config');
 let jwtProcess = require('./jwt');
+const request = require('request');
 
 //GRAB STUFF FROM DB
-let USER = 'user1';
-let PW = 'pw1';
+const base_url = 'http://localhost:8080/';
+
 
 class Handler {
+  constructor() {
+    console.log("FROM HANDLE",this)
+    this.login = this.login.bind(this)
+  }
+
+  sendRequest(options, callback) {
+    request(options, 
+        (error, response, body) => {
+            if(!error){
+                callback(JSON.parse(body));
+            }
+        }
+    )
+    .on('error', err => {
+        console.log('request failed');
+    })
+  }
 
   //login attempt
   login (req, res) {
     let username = req.body.username;
     let password = req.body.password;
+    
+
+    const options = {
+      method: 'GET',
+      url: base_url + 'users',
+      qs: {
+          displayname: username,
+          passwordhash: password
+      }
+    }
+    this.sendRequest(options, objList => {
+      let USER = objList[0].displayname
+      let PW = objList[0].passwordhash
 
     if (username && password) {
 
       //VERIFY LOGIN HERE
-      console.log(username,password)
       if (username === USER && password === PW) {
         let token = jwt.sign({username: username},
           config.secret,
@@ -41,6 +71,7 @@ class Handler {
         message: '??? your request is broken'
       });
     }
+    })      
   }
 
 
