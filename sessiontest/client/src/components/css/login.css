@@ -1,0 +1,9 @@
+.login-form {
+    margin: auto;
+    width: 500px; 
+}
+.login-box {
+    display: flex;
+    align-items: center;
+    height: 90vh; 
+}

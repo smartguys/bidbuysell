@@ -18,7 +18,7 @@ class Handler {
     if (username && password) {
 
       //VERIFY LOGIN HERE
-
+      console.log(username,password)
       if (username === USER && password === PW) {
         let token = jwt.sign({username: username},
           config.secret,
@@ -64,7 +64,7 @@ function main () {
   app.post('/login', handler.login);
   app.get('/', jwtProcess.authToken, handler.index);
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 5000;
   app.listen(port, () => console.log(`Server is listening on port: ${port}`));
 }
 
