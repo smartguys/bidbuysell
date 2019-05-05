@@ -17,17 +17,15 @@ npm install
 
 
 ## Running
-
-Make sure to add a `config.js` file in the `config` folder. See the example there for more details.
-
-Production mode:
-
-```shell
-npm start
-```
-
 Development (Webpack dev server) mode:
 
 ```shell
 npm run start:dev
 ```
+
+To make sure everything is installed you should be able to open up `localhost:8080` and play around with the counters. If that is not working, something is wrong with your MongoDB installation or it's not running. Also consider installing MongoDB Compass Community edition. 
+
+## Explanation
+- In the `server\models` folders you will find schemas of the entities using Mongoose. 
+- In the `routes\api` folders you will find the CRUD operations for each entity. You can look up the MongoDB CRUD functions and see how the api calls are created.
+- So far I have User signup/login implemented. You can download a REST client such as Advanced Rest Client or use curl to make api calls. 
