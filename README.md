@@ -1,21 +1,33 @@
-# bidbuysell
-E-bidding Platform
+# MERN-boilerplate
 
-Check the Wiki for minutes.
+This is a boilerplate project using the following technologies:
+- [React](https://facebook.github.io/react/) and [React Router](https://reacttraining.com/react-router/) for the frontend
+- [Express](http://expressjs.com/) and [Mongoose](http://mongoosejs.com/) for the backend
+- [Sass](http://sass-lang.com/) for styles (using the SCSS syntax)
+- [Webpack](https://webpack.github.io/) for compilation
 
-# Getting Started
+
+## Requirements
+
+- [Node.js](https://nodejs.org/en/) 6+
+
+```shell
+npm install
 ```
-$ npm install 
+
+
+## Running
+
+Make sure to add a `config.js` file in the `config` folder. See the example there for more details.
+
+Production mode:
+
+```shell
+npm start
 ```
-This command will start the React app (port 3000), node server (port 5000) and json-server (port 8080)
-```
-$ npx run dev
-```
-Go to the login route to login using any user info from the json-server. Right now error handling needs some tweaking. If you try something incorret it'll crash the node server. 
-```
-localhost:3000/Login
-```
-This an example of a protected route. If you try to access without a session token you will be directed to login. To delete token go to Inspector > Storage/Memory > Local Storage > delete cool-jwt
-```
-localhost:3000/Protected
+
+Development (Webpack dev server) mode:
+
+```shell
+npm run start:dev
 ```

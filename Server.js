@@ -1,61 +1,19 @@
-const request = require('request');
+const nodemon = require('nodemon');
+const path = require('path');
 
-const base_url = 'http://localhost:8080/';
-
-function sendRequest(options, callback){
-    request(options, 
-        (error, response, body) => {
-            if(!error){
-                callback(JSON.parse(body));
-            }
-        }
-    )
-    .on('error', err => {
-        console.log('request failed');
-    })
-}
-
-function hash(text){
-    // our password hashing function
-    return text
-}
-
-function login(displayname, password, callback) {
-    const options = {
-        method: 'GET',
-        url: base_url + 'users',
-        qs: {
-            displayname: displayname,
-            passwordhash: hash(password)
-        }
-    }
-    sendRequest(options, objList => {
-        callback(objList[0]);
-    })
-}
-
-function isVIP(userID, callback) {
-    const options = {
-        method: 'GET',
-        url: base_url + 'vips',
-        qs: {
-            id: userID,
-        }
-    }
-    sendRequest(options, objList => {
-        callback(objList.length !== 0);
-    })
-}
-
-login('user1', 'pw1', user => {
-    console.log(user)
+nodemon({
+  execMap: {
+    js: 'node'
+  },
+  script: path.join(__dirname, 'server/server'),
+  ignore: [],
+  watch: process.env.NODE_ENV !== 'production' ? ['server/*'] : false,
+  ext: 'js'
+})
+.on('restart', function() {
+  console.log('Server restarted!');
+})
+.once('exit', function () {
+  console.log('Shutting down server');
+  process.exit();
 });
-
-isVIP(12, result => {
-    console.log(result);
-})
-
-isVIP(8, result => {
-    console.log(result);
-})
-
