@@ -1,5 +1,8 @@
 const User = require('../../models/User')
 const UserSession = require('../../models/UserSession')
+let jwt = require('jsonwebtoken');
+let jwtProcess = require('../../jwt');
+const config = require('../../../config/config')
 
 module.exports = (app) => {
     /*
@@ -98,6 +101,13 @@ module.exports = (app) => {
 
     /*
     * Sign in
+    {
+  "firstName": "Nabil",
+  "lastName": "Khatri",
+  "userName": "copy",
+  "password": "remorse123",
+  "email": "jogn@john.com"
+}
     */
    app.post('/api/account/signin', (req, res, next) => {
        const { body } = req; 
@@ -107,7 +117,6 @@ module.exports = (app) => {
        let {
            userName
        } = body; 
-
        if (!userName) {
         return res.send({
             success: false,
@@ -122,7 +131,7 @@ module.exports = (app) => {
         });
     }
 
-    userName = userName.toLowerCase;
+    userName = userName.toLowerCase();
 
     User.find({
         userName: userName
@@ -151,7 +160,12 @@ module.exports = (app) => {
         }
          // otherwise create user session
          const userSession = new UserSession();
+         let token = jwt.sign({userName: userName},
+            config.secret,
+            {expiresIn: '1w'}
+          );
          userSession.userId = user._id;
+         userSession.token = token; 
          userSession.save((err, doc) => {
              if (err) {
                  return res.send({
@@ -163,7 +177,7 @@ module.exports = (app) => {
              return res.send({
                  success: true,
                  message: 'Valid Signin',
-                 token: doc._id
+                 token: doc.token
              });
          })
 
