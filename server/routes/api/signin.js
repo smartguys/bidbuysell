@@ -1,10 +1,56 @@
 const User = require('../../models/User')
 const UserSession = require('../../models/UserSession')
+const Listing = require('../../models/Listing')
 let jwt = require('jsonwebtoken');
 let jwtProcess = require('../../jwt');
 const config = require('../../../config/config')
 
 module.exports = (app) => {
+    // Create Listing
+    app.post('/api/listing/create', (req,res,next) => {
+        const { body } = req; 
+        const {
+            userID,
+            name,
+            description,
+            price,
+            endtime,
+            status,
+            image,
+            friendDiscount
+        } = body; 
+        // console.log(userID, name, description, price, endtime, status, image, friendDiscount);
+
+        const newListing = new Listing();
+        newListing.userID = userID;
+        newListing.name = name;
+        newListing.description = description;
+        newListing.price = price;
+        newListing.endtime = endtime;
+        newListing.status = status;
+        newListing.image = image;
+        newListing.friendDiscount = friendDiscount;
+        newListing.save((err, listing) => {
+            if (err) {
+                return res.send({
+                    success: false,
+                    message: "Server error.",
+                    error: err
+                });
+            }
+            console.log(listing)
+            return res.send({
+                success: true,
+                message: "Listing created."
+            });
+        })
+
+        // return res.send({
+        //     success: "idk",
+        //     message: "we'll see..."
+        // })
+    });
+
     /*
     * Sign up
     */
