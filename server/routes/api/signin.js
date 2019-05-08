@@ -10,7 +10,7 @@ module.exports = (app) => {
     app.post('/api/listing/create', (req,res,next) => {
         const { body } = req; 
         const {
-            userID,
+            seller,
             name,
             description,
             price,
@@ -22,14 +22,16 @@ module.exports = (app) => {
         // console.log(userID, name, description, price, endtime, status, image, friendDiscount);
 
         const newListing = new Listing();
-        newListing.userID = userID;
+        newListing.seller = seller;
         newListing.name = name;
         newListing.description = description;
         newListing.price = price;
         newListing.endtime = endtime;
         newListing.status = status;
         newListing.image = image;
-        newListing.friendDiscount = friendDiscount;
+        if(friendDiscount)
+            newListing.friendDiscount = friendDiscount;
+        // newListing.friendDiscount = friendDiscount;
         newListing.save((err, listing) => {
             if (err) {
                 return res.send({

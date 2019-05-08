@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ListingSchema = new mongoose.Schema({
-    name: {
+    seller: {
         type: String,
         //   default: ''
     },
@@ -9,7 +9,7 @@ const ListingSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    userId: {
+    user: {
         type: String,
         //   default: ''
     },
