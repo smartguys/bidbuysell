@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
+import Button from 'react-bootstrap/Button';
+import { Container, Grid, Row, Col } from 'react-bootstrap';
+import SearchBar from '../Search/Search'
+import Recommendation from '../Recommendation/Recommendation'
+import Listing from '../Listing/Listing'
 
 class Home extends Component {
   constructor(props) {
@@ -83,25 +88,34 @@ class Home extends Component {
     });
   }
 
+
   render() {
+    let title = {
+      marginLeft: 'auto', 
+      marginRight: 'auto',
+      fontSize: '72px', 
+      color: '#007bff',
+      weight: 'Bold'
+    }
+
     return (
-      <>
-        <p>Counters:</p>
+    <Container>
+      <Row>
+        <h1 style={title}>BidBuySell</h1>
+      </Row>
+      <Row>
+        <SearchBar></SearchBar>
+      </Row>
+      <Row>
+        <Recommendation></Recommendation>
+      </Row>
 
-        <ul>
-          { this.state.counters.map((counter, i) => (
-            <li key={i}>
-              <span>{counter.count} </span>
-              <button onClick={() => this.incrementCounter(i)}>+</button>
-              <button onClick={() => this.decrementCounter(i)}>-</button>
-              <button onClick={() => this.deleteCounter(i)}>x</button>
-            </li>
-          )) }
-        </ul>
+      <Listing></Listing>
 
-        <button onClick={this.newCounter}>New counter</button>
-      </>
+    </Container>
+
     );
+
   }
 }
 
