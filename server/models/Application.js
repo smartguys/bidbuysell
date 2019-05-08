@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt');
 
 const statesArray = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
 
-const UserSchema = new mongoose.Schema({
+const ApplicationSchema = new mongoose.Schema({
   firstName: {
-      type: String,
-      default: ''
+    type: String,
+    default: ''
   },
   lastName: {
       type: String,
@@ -47,22 +47,18 @@ const UserSchema = new mongoose.Schema({
       type: String,
       default: 'Under Review'
   },
-  isVip: {
-    type: Boolean,
-    default: false
-  }, 
   isDelete: {
       type: Boolean,
       default: false
   }
 });
 
-UserSchema.methods.generateHash = function(password) {
+ApplicationSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null); 
 }
 
-UserSchema.methods.validPassword = function(password) {
+ApplicationSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password,this.password);
 }
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Application', ApplicationSchema);

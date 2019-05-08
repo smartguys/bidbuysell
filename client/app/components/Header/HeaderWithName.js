@@ -4,11 +4,9 @@ import Button from 'react-bootstrap/Button'
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Form, FormControl } from 'react-bootstrap';
 import { Container, Grid, Row, Col } from 'react-bootstrap';
 
-const Header = () => (
+const HeaderWithName = () => (
   <Navbar bg="light" expand="lg">
-    {/* <Link to='/helloworld'>
       <Navbar.Brand>BidBuySell</Navbar.Brand>
-    </Link> */}
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="mr-auto">
@@ -29,4 +27,4 @@ const Header = () => (
 
 );
 
-export default Header;
+export default HeaderWithName;
