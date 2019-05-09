@@ -9,7 +9,7 @@ class SearchBar extends React.Component {
                 <InputGroup>
                     <Form.Control size="lg" type="text" placeholder="Search listings..." />
                     <InputGroup.Append>
-                        <Button variant="outline-secondary"><FaSearch/></Button>
+                        <Button href='/listing' variant="outline-secondary"><FaSearch/></Button>
                     </InputGroup.Append>
                 </InputGroup>
             </div>

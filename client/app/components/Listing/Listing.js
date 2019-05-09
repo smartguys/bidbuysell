@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Product from './Product'
+import SearchBar from '../Search/Search'
 
 class Listing extends React.Component {
     render() {
         return (
             <Container>
+                <Row>
+                    <Col><SearchBar></SearchBar></Col>
+                    <Col></Col>
+                </Row>
                 <Row>
                     <Col><Product></Product>
                     </Col>
