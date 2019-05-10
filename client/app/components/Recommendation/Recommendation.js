@@ -54,4 +54,4 @@ class Recommendation extends React.Component {
 
 }
 
-export default Recommendation
+export default Recommendation;

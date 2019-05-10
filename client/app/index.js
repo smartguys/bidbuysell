@@ -15,7 +15,14 @@ import Home from './components/Home/Home';
 
 import HelloWorld from './components/HelloWorld/HelloWorld';
 
+import Listing from './components/Listing/Listing';
+
+import SellerInfo from './components/Listing/SellerInfo';
+import CurrentPrice from './components/Listing/CurrentPrice';
+import BidAmount from './components/Listing/BidAmount';
+
 import './styles/styles.scss';
+import Recommendation from './components/Recommendation/Recommendation';
 
 render((
   <Router>
@@ -23,6 +30,10 @@ render((
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route path="/helloworld" component={HelloWorld}/>
+        <Route path="/listing" component={Listing}/>
+     
+
+
         <Route component={NotFound}/>
       </Switch>
     </App>
