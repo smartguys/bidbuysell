@@ -109,9 +109,6 @@ class Home extends Component {
       <Row>
         <Recommendation></Recommendation>
       </Row>
-
-      <Listing></Listing>
-
     </Container>
 
     );

@@ -7,6 +7,7 @@ module.exports = (app) => {
     /*
     * Apply
     */
+   app.put('/api/listing/buyer/:id'), 
     app.post('/api/account/apply', (req, res, next) => {
         const { body } = req; 
         const {
