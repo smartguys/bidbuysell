@@ -5,25 +5,23 @@ const ListingSchema = new mongoose.Schema({
         type: String,
         //   default: ''
     },
+    name: {
+        type: String
+    },
     description: {
         type: String,
-        default: ''
     },
     user: {
         type: String,
-        //   default: ''
     },
     price: {
         type: Number,
-        // default: 0.0
     },
     endtime: {
         type: Date,
-        //   default: ''
     },
     status: {
         type: String,
-        //   default: ''
     },
     image: {
         type: String,
