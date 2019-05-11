@@ -5,9 +5,8 @@ const Application = require('../../models/Application')
 
 module.exports = (app) => {
     /*
-    * Apply
+    * Submit application
     */
-   app.put('/api/listing/buyer/:id'), 
     app.post('/api/account/apply', (req, res, next) => {
         const { body } = req; 
         const {
@@ -68,6 +67,37 @@ module.exports = (app) => {
             }
         })
     });
+
+    /*
+    * Get single application
+    */
+   app.get('/api/account/apply/:id', (req, res, next) => {
+    let id = req.params.id;
+        Application.findOne({
+            _id: id
+        }).then(doc => {
+            res.json(doc)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }); 
+
+   /*
+    * Approve/Reject
+    */
+  app.put('/api/account/apply/:id/:decision', (req, res, next) => {
+    Application.findById(req.params.id)
+      .exec()
+      .then((application) => {
+        application.status = req.params.decision
+
+        application.save()
+          .then(() => res.json(application))
+          .catch((err) => next(err));
+      })
+      .catch((err) => next(err));
+  });
 }
 
     //     Application.find({
