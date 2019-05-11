@@ -5,11 +5,10 @@ let jwtProcess = require('../../jwt');
 const User = require('../../models/User')
 
 module.exports = (app) => {
+    // create listing
     app.post('/api/listing/create', (req,res,next) => {
         const { body } = req; 
-
         const newListing = new Listing();
-
         props = [
             'seller' ,
              'name', 
@@ -19,9 +18,7 @@ module.exports = (app) => {
              'status', 
              'image', 
              'friendDiscount'];
-
         props.forEach(prop => {
-            console.log(body[prop])
             if(body[prop] == null) {
                 return res.send({
                     success: false,
@@ -46,4 +43,47 @@ module.exports = (app) => {
             });
         })
     });
+    // show active listings
+    app.get('/api/listing/search', (req,res,next) => {
+        const term = req.params.term
+        Listing.find({
+            status: 'active'
+        }, (err, listings) => {
+            console.log(listings)
+            if (err) {
+                return res.send({
+                    success: false,
+                    message: 'Error: server error'
+                });
+            }
+            return res.send({
+                success: true,
+                message: 'succesful search',
+                data: listings
+            })
+        });
+    })
+    // search active listings
+    app.get('/api/listing/search/:term', (req,res,next) => {
+        const term = req.params.term
+        Listing.find({
+            $and: [
+                {status: 'active'},
+                {$text: {$search: term}}
+            ]
+        }, (err, listings) => {
+            console.log(listings)
+            if (err) {
+                return res.send({
+                    success: false,
+                    message: 'Error: server error'
+                });
+            }
+            return res.send({
+                success: true,
+                message: 'succesful search',
+                data: listings
+            })
+        });
+    })
 }
