@@ -43,6 +43,26 @@ module.exports = (app) => {
             });
         })
     });
+    // show specific listing by id
+    app.get('/api/listing/id/:id', (req,res,next) => {
+        const id = req.params.id;
+        Listing.find({
+            _id: id
+        }, (err, listing) => {
+            console.log(listing)
+            if (err) {
+                return res.send({
+                    success: false,
+                    message: 'Error: server error'
+                });
+            }
+            return res.send({
+                success: true,
+                message: 'success',
+                data: listing
+            })
+        });
+    })
     // show active listings
     app.get('/api/listing/search', (req,res,next) => {
         const term = req.params.term
