@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import {Button, ButtonToolbar} from 'react-bootstrap/Button';
 
 const App = ({ children }) => (
   <>
@@ -10,8 +11,7 @@ const App = ({ children }) => (
     <main>
       {children}
     </main>
-
-    <Footer />
+    <Footer></Footer>
   </>
 );
 
