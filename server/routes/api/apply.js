@@ -96,7 +96,7 @@ module.exports = (app) => {
           .then(() => res.json(application))
           .catch((err) => next(err));
       })
-      .catch((err) => next(err));
+      .catch((err) => next(err));git 
   });
 }
 

@@ -6,7 +6,9 @@ import { Container, Grid, Row, Col } from 'react-bootstrap';
 
 const HeaderWithName = () => (
   <Navbar bg="light" expand="lg">
+    <Link to='/'>
       <Navbar.Brand>BidBuySell</Navbar.Brand>
+    </Link>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="mr-auto">
@@ -18,8 +20,9 @@ const HeaderWithName = () => (
         <Nav.Item>
           <Nav.Link eventKey="link-1">Sell</Nav.Link>
         </Nav.Item>
-        
-        <Button style={ {marginLeft: '5px'} } variant="primary">Log in</Button>
+        <Link to='/login'>
+          <Button style={{ marginLeft: '5px' }} variant="primary">Log in</Button>
+        </Link>
       </Nav>
     </Navbar.Collapse>
   </Navbar>
