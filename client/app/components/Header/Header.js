@@ -21,7 +21,9 @@ const Header = () => (
           <Nav.Link eventKey="link-1">Sell</Nav.Link>
         </Nav.Item>
         
+        <Link to ='/login'>
         <Button style={ {marginLeft: '5px'} } variant="primary">Log in</Button>
+        </Link>
       </Nav>
     </Navbar.Collapse>
   </Navbar>

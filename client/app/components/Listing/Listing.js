@@ -1,31 +1,23 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Product from './Product'
-<<<<<<< HEAD
 //import ProductImage from './ProductImage';
 import CurrentPrice from './CurrentPrice';
 import BidAmount from './BidAmount';
 import SellerInfo from './SellerInfo';
 //import Description from './Description';
-=======
 import SearchBar from '../Search/Search'
->>>>>>> e491701fb298e5736740989ef5fc6e751a4e673f
 
 class Listing extends React.Component {
     render() {
         return (
-            <Container>
-<<<<<<< HEAD
-            <Row>
-                    <Col ><Product></Product>
-=======
-                <Row>
-                    <Col><SearchBar></SearchBar></Col>
+            <Container fluid={true}>
+                <Row className="mt-3">
+                    <Col xs lg="8"><SearchBar></SearchBar></Col>
                     <Col></Col>
                 </Row>
                 <Row>
                     <Col><Product></Product>
->>>>>>> e491701fb298e5736740989ef5fc6e751a4e673f
                     </Col>
 
                     <Col>

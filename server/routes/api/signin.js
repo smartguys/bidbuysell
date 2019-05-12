@@ -109,6 +109,14 @@ module.exports = (app) => {
   "email": "jogn@john.com"
 }
     */
+    app.get('/api/account/ok', (req, res, next) => {
+        return res.send({
+            // success: true,
+            message: 'ok!!!'
+        });
+    });
+
+
    app.post('/api/account/signin', (req, res, next) => {
        const { body } = req; 
        const {
