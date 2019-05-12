@@ -130,7 +130,7 @@ class Application extends Component {
 
                             <Form.Group controlId="formGroupNumber">
                                 <Form.Label>Full Name</Form.Label>
-                                <Form.Control name="number" type="text" placeholder="Card Number" onChange={this.change} />
+                                <Form.Control name="number" type="text" placeholder="Full Name" onChange={this.change} />
                             </Form.Group>
 
                             <Row>
@@ -156,6 +156,11 @@ class Application extends Component {
 
                     </Col>
                 </Row>
+                <Row className="justify-content-center">
+                    <Button style={{ marginLeft: '5px' }} variant="primary">Submit Application</Button>
+                </Row>
+                
+
 
 
             </Container>

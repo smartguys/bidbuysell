@@ -17,6 +17,7 @@ import './styles/styles.scss';
 import Recommendation from './components/Recommendation/Recommendation';
 import Login from './components/Login/Login'
 import Application from './components/Apply/Application'
+import Sell from './components/Sell/Sell'
 
 render((
   <Router>
@@ -27,6 +28,8 @@ render((
         <Route path="/listing" component={Listing}/>
         <Route path="/login" component={Login}/>
         <Route path="/apply" component={Application}/>
+        <Route path="/sell" component={Sell}/>
+
         <Route component={NotFound}/>
       </Switch>
     </App>

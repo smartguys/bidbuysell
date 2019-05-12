@@ -13,7 +13,7 @@ const App = ({ children }) => (
     <main>
       {children}
     </main>
-    <Footer></Footer>
+    {/* <Footer></Footer> */}
   </>
 );
 

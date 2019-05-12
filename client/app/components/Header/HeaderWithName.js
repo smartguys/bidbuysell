@@ -18,7 +18,9 @@ const HeaderWithName = () => (
           <Nav.Link href="/home">Buy</Nav.Link>
         </Nav.Item>
         <Nav.Item>
+          <Link to="/sell">
           <Nav.Link eventKey="link-1">Sell</Nav.Link>
+          </Link>
         </Nav.Item>
         <Link to='/login'>
           <Button style={{ marginLeft: '5px' }} variant="primary">Log in</Button>
