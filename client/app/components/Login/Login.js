@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Row, Col } from 'react-bootstrap'
 import '../../styles/login.css'
+import { Link } from 'react-router-dom';
+
 
 class Login extends Component {
     render() {
@@ -25,9 +27,9 @@ class Login extends Component {
             </Button>
             
             <h5>Don't have an account? Submit an application!</h5>
-                <Button variant="primary" type="submit">
+                <Link to="/apply"><Button variant="primary" type="submit">
               Apply
-            </Button>
+            </Button></Link>
         
           </Form>
           </div>

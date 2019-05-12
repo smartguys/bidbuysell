@@ -15,12 +15,10 @@ const HeaderWithName = () => (
       </Nav>
       <Nav className="justify-content-end" activeKey="/home">
         <Nav.Item>
-          <Nav.Link href="/home">Buy</Nav.Link>
+        <Link to='/sell'><Navbar.Brand>Buy</Navbar.Brand></Link>
         </Nav.Item>
         <Nav.Item>
-          <Link to="/sell">
-          <Nav.Link eventKey="link-1">Sell</Nav.Link>
-          </Link>
+        <Link to='/sell'><Navbar.Brand>Sell</Navbar.Brand></Link>
         </Nav.Item>
         <Link to='/login'>
           <Button style={{ marginLeft: '5px' }} variant="primary">Log in</Button>
