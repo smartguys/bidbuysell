@@ -18,6 +18,10 @@ const ListingSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    auction: {
+        type: Boolean,
+        required: true
+    },
     endtime: {
         type: Date,
         required: true
