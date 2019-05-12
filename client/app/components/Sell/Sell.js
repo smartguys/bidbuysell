@@ -10,7 +10,7 @@ import Files from "react-butterfiles";
 class Sell extends Component {
     constructor() {
         super()
-        this.state = { 
+        this.state = {
             tags: [],
             files: [],
             errors: []
@@ -59,7 +59,7 @@ class Sell extends Component {
 
                                         />
                                     </div>))}
-                                    <Form.Label>Starting Price:</Form.Label>
+                                <Form.Label>Starting Price:</Form.Label>
                                 <InputGroup className="mb-3">
                                     <InputGroup.Prepend>
                                         <InputGroup.Text>$</InputGroup.Text>
@@ -70,35 +70,35 @@ class Sell extends Component {
 
                             </Col>
                             <Col>
-                            <Form.Label>Upload Images:</Form.Label>
+                                <Form.Label>Upload Images:</Form.Label>
 
-                            <Files
-    multiple={true} 
-    maxSize="2mb"
-    multipleMaxSize="10mb"
-    multipleMaxCount={3}
-    accept={["image/png","image/jpg","image/jpeg"]}
-    onSuccess={files => this.setState({ files })}
-    onError={errors => this.setState({ errors })}
->
-    {({ browseFiles, getDropZoneProps }) => (
-        <>
-            <div {...getDropZoneProps({ className: "myDropZone" })}/>
-            <button onClick={browseFiles}>Select files...</button>
-            <ol>
-                {this.state.files.map(file => (
-                    <li key={file.name}>{file.name}</li>
-                ))}
-                {this.state.errors.map(error => (
-                    <li key={error.file.name}>
-                        {error.file.name} - {error.type}
-                    </li>
-                ))}
-            </ol>
-        </>
-    )}
-</Files>
-</Col>
+                                <Files
+                                    multiple={true}
+                                    maxSize="2mb"
+                                    multipleMaxSize="10mb"
+                                    multipleMaxCount={3}
+                                    accept={["image/png", "image/jpg", "image/jpeg"]}
+                                    onSuccess={files => this.setState({ files })}
+                                    onError={errors => this.setState({ errors })}
+                                >
+                                    {({ browseFiles, getDropZoneProps }) => (
+                                        <>
+                                            <div {...getDropZoneProps({ className: "myDropZone" })} />
+                                            <button onClick={browseFiles}>Select files...</button>
+                                            <ol>
+                                                {this.state.files.map(file => (
+                                                    <li key={file.name}>{file.name}</li>
+                                                ))}
+                                                {this.state.errors.map(error => (
+                                                    <li key={error.file.name}>
+                                                        {error.file.name} - {error.type}
+                                                    </li>
+                                                ))}
+                                            </ol>
+                                        </>
+                                    )}
+                                </Files>
+                            </Col>
                         </Row>
 
                     </Col>

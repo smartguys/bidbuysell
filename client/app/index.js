@@ -18,6 +18,8 @@ import Recommendation from './components/Recommendation/Recommendation';
 import Login from './components/Login/Login'
 import Application from './components/Apply/Application'
 import Sell from './components/Sell/Sell'
+import SearchResults from './components/SearchResults/SearchResults';
+import IndivudalListing from './components/SearchResults/IndividualListing';
 
 render((
   <Router>
@@ -29,6 +31,10 @@ render((
         <Route path="/login" component={Login}/>
         <Route path="/apply" component={Application}/>
         <Route path="/sell" component={Sell}/>
+        <Route path="/search" component={SearchResults}/>
+        <Route path="/individual" component={IndivudalListing}/>
+
+
 
         <Route component={NotFound}/>
       </Switch>

@@ -12,8 +12,8 @@ class Listing extends React.Component {
     render() {
         return (
             <Container>
-                <Row>
-                    <Col><SearchBar></SearchBar></Col>
+                <Row className="mt-5">
+                    <Col xs lg="8"><SearchBar></SearchBar></Col>
                     <Col></Col>
                 </Row>
                 <Row>
