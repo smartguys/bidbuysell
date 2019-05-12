@@ -11,8 +11,8 @@ import SearchBar from '../Search/Search'
 class Listing extends React.Component {
     render() {
         return (
-            <Container>
-                <Row className="mt-5">
+            <Container fluid={true}>
+                <Row className="mt-3">
                     <Col xs lg="8"><SearchBar></SearchBar></Col>
                     <Col></Col>
                 </Row>
