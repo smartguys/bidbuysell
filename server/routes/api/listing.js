@@ -39,7 +39,8 @@ module.exports = (app) => {
                 console.log(listing)
                 return res.send({
                     success: true,
-                    message: "Listing created."
+                    message: "Listing created.",
+                    data: {listing}
                 });
             });
         });
@@ -52,11 +53,18 @@ module.exports = (app) => {
         }, (err, listings) => {
             console.log(listings)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
-            if(!listings[0]) {return res.send({success: false, message: 'Error: no listing'});};
-            return res.send({
-                success: true,
-                message: 'success',
-                data: listings
+            const listing = listings[0]
+            if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
+            // perhaps include all bids
+            Bid.find({
+                listing: listing._id
+            }, (err, bids) => {
+                if (err) { return res.send({success: false, message: 'Error: server error'});};
+                return res.send({
+                    success: true,
+                    message: 'success',
+                    data: {listing, bids}
+                })
             })
         });
     })
@@ -71,7 +79,7 @@ module.exports = (app) => {
             return res.send({
                 success: true,
                 message: 'succesful search',
-                data: listings
+                data: {listings}
             })
         });
     })
@@ -89,7 +97,7 @@ module.exports = (app) => {
             return res.send({
                 success: true,
                 message: 'succesful search',
-                data: listings
+                data: {listings}
             })
         });
     })
@@ -128,7 +136,8 @@ module.exports = (app) => {
                     console.log(bid)
                     return res.send({
                         success: true,
-                        message: "Bid created."
+                        message: "Bid created.",
+                        data: {bid}
                     });
                 })
             })
