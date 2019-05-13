@@ -22,7 +22,3 @@ $RECYCLE.BIN/
 .DS_Store
 .Spotlight-V100
 .Trashes
-
-# fastest way for me to get around some annoying message
-package.json
-package-lock.json
