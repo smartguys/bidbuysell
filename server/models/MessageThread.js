@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
-const MessageSchema = new mongoose.Schema({ 
-	id : {
-		type: Number,
-		required: true
-	},
+const MessageSchema = new mongoose.Schema({
 	sender : {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
@@ -24,11 +20,7 @@ const MessageSchema = new mongoose.Schema({
 	}
 });
 
-const MessageThreadSchema = new mongoose.Schema({ 
-	id : {
-		type: Number,
-		required: true
-	},
+const MessageThreadSchema = new mongoose.Schema({
 	users : [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
