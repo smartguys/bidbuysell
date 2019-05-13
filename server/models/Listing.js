@@ -28,6 +28,7 @@ const ListingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
+        enum: ['pending', 'rejected', 'active', 'expired', 'escrow', 'closed'],
         required: true
     },
     image: {
