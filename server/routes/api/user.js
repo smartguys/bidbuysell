@@ -78,15 +78,6 @@ module.exports = (app) => {
     });
     /*
     * Get all users
-    */
-    app.get('/api/account/ok', (req, res, next) => {
-        return res.send({
-            // success: true,
-            message: 'ok!!!'
-        });
-    });
-    /*
-    * Get all users
     */  
     app.get('/api/account', (req, res, next) => {
         User.find()
