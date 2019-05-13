@@ -17,7 +17,7 @@ module.exports = (app) => {
             'price',
             'auction',
             'endtime', 
-            'status', 
+            // 'status', 
             'image', 
             'friendDiscount'];
         params.forEach(param => {
