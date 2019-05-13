@@ -45,6 +45,42 @@ module.exports = (app) => {
             });
         });
     });
+    // activate listing by id
+    app.put('/api/listing/activate/:id', (req,res,next) => {
+        const id = req.params.id;
+        Listing.find({
+            _id: id
+        }, (err, listings) => {
+            console.log(listings)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            const listing = listings[0]
+            if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
+            Listing.updateOne({_id: listing._id,}, {$set: {status: 'active'}}) // change status to active
+            Bid.find({ // include all bids
+                listing: listing._id
+            }, (err, bids) => {
+                if (err) { return res.send({success: false, message: 'Error: server error'});};
+                return res.send({
+                    success: true,
+                    message: 'success',
+                    data: {listing, bids}
+                })
+            })
+        });
+    })
+    // show all listings, regardless of status
+    app.get('/api/listing/all', (req,res,next) => {
+        const term = req.params.term
+        Listing.find({}, (err, listings) => {
+            console.log(listings)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            return res.send({
+                success: true,
+                message: 'all listings',
+                data: {listings}
+            })
+        });
+    })
     // show specific listing by id
     app.get('/api/listing/id/:id', (req,res,next) => {
         const id = req.params.id;
@@ -55,8 +91,7 @@ module.exports = (app) => {
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             const listing = listings[0]
             if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
-            // perhaps include all bids
-            Bid.find({
+            Bid.find({  // include all bids
                 listing: listing._id
             }, (err, bids) => {
                 if (err) { return res.send({success: false, message: 'Error: server error'});};
