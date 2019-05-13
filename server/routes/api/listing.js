@@ -45,27 +45,41 @@ module.exports = (app) => {
             });
         });
     });
-    // activate listing by id
-    app.put('/api/listing/activate/:id', (req,res,next) => {
+    //update the status of a listing
+    app.put('/api/listing/update/:id', (req,res,next) => {
         const id = req.params.id;
+        const status = req.query.status
+        const choices = ['pending', 'rejected', 'active', 'expired', 'escrow', 'closed'];
+        if (!choices.includes(status)) { 
+            return res.send({
+                success: false, 
+                status: status,
+                message: 'Error: query param must contain any of: ' + choices
+            });
+        ;};
         Listing.find({
             _id: id
         }, (err, listings) => {
-            console.log(listings)
+            // console.log(listings)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             const listing = listings[0]
             if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
-            Listing.updateOne({_id: listing._id,}, {$set: {status: 'active'}}) // change status to active
-            Bid.find({ // include all bids
-                listing: listing._id
-            }, (err, bids) => {
-                if (err) { return res.send({success: false, message: 'Error: server error'});};
-                return res.send({
-                    success: true,
-                    message: 'success',
-                    data: {listing, bids}
-                })
-            })
+            Listing.findOneAndUpdate(
+                {_id: listing._id,}, 
+                {$set: {status: status}},
+                {returnOriginal: false},
+                (err, listing) => {
+                    console.log(status)
+                    console.log(err)
+                    console.log(listing.status)
+                    // the returnOriginal option doesnt see to work, 
+                    // where I want to return the modified object, so just respond 'success', for now.
+                    return res.send({
+                        success: true,
+                        message: 'success',
+                    })
+                }
+            )
         });
     })
     // show all listings, regardless of status
