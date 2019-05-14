@@ -35,18 +35,6 @@ class Listing extends React.Component {
             </Row>
             </Container>
 
-
-//  <Row><Description></Description></Row>
-// <Col><ProductImage></ProductImage></Col>
-
-            //     <HeaderWithName></HeaderWithName>
-            // <SearchBar></SearchBar> 
-            // <ProductInfo>
-            //     <Product></Product>  
-            //     <CurrentPrice></CurrentPrice>
-            //     <SellerInfo></SellerInfo>
-            //     <ProductDescription> 
-            // </ProductInfo>
         )
     }
 }

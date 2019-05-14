@@ -6,7 +6,7 @@ import CurrentPrice from '../Listing/CurrentPrice';
 import BidAmount from '../Listing/BidAmount';
 import SellerInfo from '../Listing/SellerInfo';
 
-class IndivudalListing extends Component {
+class IndividualListing extends Component {
     render() {
         return (
             <Container>
@@ -24,4 +24,4 @@ class IndivudalListing extends Component {
     }
 }
 
-export default IndivudalListing;
+export default IndividualListing;

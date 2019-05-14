@@ -19,8 +19,11 @@ import Login from './components/Login/Login'
 import Application from './components/Apply/Application'
 import Sell from './components/Sell/Sell'
 import SearchResults from './components/SearchResults/SearchResults';
-import IndivudalListing from './components/SearchResults/IndividualListing';
+import IndividualListing from './components/SearchResults/IndividualListing';
 import LeaveFeedback from './components/Feedback/LeaveFeedback';
+import Admin from './components/Admin/Admin';
+import MyAccount from './components/Account/MyAccount';
+
 
 render((
   <Router>
@@ -33,9 +36,12 @@ render((
         <Route path="/apply" component={Application}/>
         <Route path="/sell" component={Sell}/>
         <Route path="/search" component={SearchResults}/>
-        <Route path="/individual" component={IndivudalListing}/>
+        <Route path="/individual" component={IndividualListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
+        <Route path="/admin" component={Admin}/>
+        <Route path="/myaccount" component={MyAccount}/>
       
+
         <Route component={NotFound}/>
       </Switch>
     </App>
