@@ -21,6 +21,10 @@ const TransactionSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    bid : {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Bid',
+	},
 });
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

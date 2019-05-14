@@ -30,6 +30,7 @@ module.exports = (app) => {
                 newTransaction.buyer = bid.buyer;
                 newTransaction.price = bid.price;
                 newTransaction.timestamp = Date.now();
+                newTransaction.bid = bid;
                 newTransaction.save((err, transaction) => {
                     if (err) { return res.send({success: false, message: 'Error: server error'});};
                     Listing.findOneAndUpdate(
@@ -60,6 +61,23 @@ module.exports = (app) => {
                 success: true,
                 message: 'all transactions',
                 data: {transactions}
+            })
+        });
+    })
+    // show specific transaction by id
+    app.get('/api/transaction/id/:id', (req,res,next) => {
+        const id = req.params.id;
+        Transaction.find({
+            _id: id
+        }, (err, transactions) => {
+            console.log(transactions)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            const transaction = transactions[0]
+            if(!transaction) {return res.send({success: false, message: 'Error: no transaction'});};
+            return res.send({
+                success: true,
+                message: 'success',
+                data: {transaction}
             })
         });
     })
