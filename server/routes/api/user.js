@@ -28,7 +28,7 @@ module.exports = (app) => {
             missingFields = true
             missing += `${param}, `
         } else {
-            newListing[param] = body[param]
+            newUser[param] = body[param]
         }
         })
 
