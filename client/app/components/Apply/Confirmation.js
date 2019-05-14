@@ -15,6 +15,7 @@ class Confirmation extends Component {
             <Container>
                 <Row className='mt-5 justify-content-center'>
                     <h4>Thanks {firstName}! Your application has been submitted.</h4>
+                    <p>We will review your application and get back to your shortly</p>
                 </Row>
             </Container>
         )

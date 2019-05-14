@@ -4,18 +4,25 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 
 class SellerInfo extends React.Component {
+   
+
     render() {
+        let {
+            seller
+        } = this.props
+
         return(
-            <div style={ { marginTop: '50px', paddingBottom: '50px'}}>
-            <h6>Seller Information</h6>
-            <div>Name (.prop here)</div>
-            <div>Rating (.state here)</div>
-
-
-
-
-
-            </div>
+            <Container className='mt-3'>
+            <Row>
+                <h5>Seller Information</h5>
+            </Row>
+            <Row>
+                Sold by: {seller}
+            </Row>
+            <Row>
+                Rating: {seller}
+            </Row>
+            </Container>
         )
     }
 }

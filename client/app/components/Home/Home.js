@@ -1,39 +1,35 @@
 import React, { Component } from 'react';
-import 'whatwg-fetch';
 import Button from 'react-bootstrap/Button';
 import { Container, Grid, Row, Col } from 'react-bootstrap';
 import SearchBar from '../Search/Search'
 import Recommendation from '../Recommendation/Recommendation'
 import Listing from '../Listing/Listing'
-import { getJwt } from '../../helpers/getjwt'
-import Axios from 'axios'
 
 class Home extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      userName: '',
-    };
+      query: ''
+    }
+
   }
 
-  componentDidMount() {
-    const jwt = getJwt();
-    console.log(jwt)
-    if (jwt) {
-    Axios.get('/verify', {
-      headers: {
-        Authorization: `Bearer ${jwt}`
-      }
-    }).then(res => {
-      console.log(res); 
-    }).catch(err => {
-        this.props.history.push('/Login')
-        localStorage.removeItem('cool-jwt')
-      }
-      )
-  }
+  change = e => {
+    this.setState({
+        [e.target.name]: e.target.value
+    })
 }
+
+  submit = e => {
+      e.preventDefault();
+      this.props.history.push({
+          pathname: '/search',
+          query: this.state.query
+        })
+  }
+
+
 
   render() {
     let title = {
@@ -50,7 +46,7 @@ class Home extends Component {
           <h1 style={title}>BidBuySell</h1>
         </Row>
         <Row>
-          <SearchBar></SearchBar>
+          <SearchBar change={this.change} submit={this.submit}></SearchBar>
         </Row>
         <Row>
           <Recommendation></Recommendation>
