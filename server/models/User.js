@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
     state: {
         type: String,
         uppercase: true,
-        required: true,
+        // required: true,
         enum: statesArray
     },
     zip: Number
