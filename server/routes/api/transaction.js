@@ -81,4 +81,22 @@ module.exports = (app) => {
             })
         });
     })
+    // get all transactions by user, whether buyer or seller
+    app.get('/api/transaction/user/:id', (req,res,next) => {
+        const id = req.params.id;
+        Transaction.find({
+            $or: [
+                {buyer: id},
+                {seller: id}
+            ]
+        }, (err, transactions) => {
+            console.log(transactions)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            return res.send({
+                success: true,
+                message: 'success',
+                data: {transactions}
+            })
+        });
+    })
 }
