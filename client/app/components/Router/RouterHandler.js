@@ -28,6 +28,7 @@ class RouterHandler extends Component {
 
         this.state = {
           userName: '',
+          userID: ''
         };
     }
 
@@ -45,9 +46,12 @@ class RouterHandler extends Component {
         }
       }).then(res => {
         this.setState({
-          userName: res.data.message.userName
+          userName: res.data.message.userName,
+          userID: res.data.message.userID
         });
         console.log("username:",this.state.userName); 
+        console.log("userid:",this.state.userID); 
+
       }).catch(err => {
         localStorage.removeItem('cool-jwt')
       }
@@ -64,7 +68,8 @@ class RouterHandler extends Component {
 
     render() {
       const {
-        userName
+        userName,
+        userID
       } = this.state; 
 
     return(
@@ -75,11 +80,11 @@ class RouterHandler extends Component {
         <Route path="/listing" component={Listing}/>
         <Route path="/login" render={(props) => <Login {...props} userName={userName} login={this.login}/>} />
         <Route path="/apply" component={Application}/>
-        <Route path="/sell" component={Sell}/>
+        <Route path="/sell"  render={(props) => <Sell {...props} userID={userID}/>} />
         <Route path="/search" component={SearchResults}/>
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
-        <Route path="/myaccount" component={MyAccount}/>
+        <Route path="/myaccount/:id" component={MyAccount}/>
         <Route component={NotFound}/>
       </Switch>
     </App>
@@ -89,3 +94,4 @@ class RouterHandler extends Component {
 }
 
 export default RouterHandler;
+

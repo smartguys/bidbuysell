@@ -11,6 +11,9 @@ import Rating from 'react-rating'
 import Filter from './Filters'
 import IndividualListing from './IndividualListing'
 import axios from 'axios'
+import {
+    Link
+  } from 'react-router-dom'
 
 class SearchResults extends Component {
     constructor(props) {
@@ -73,8 +76,9 @@ class SearchResults extends Component {
                     <Col>
                         {listings.map( (listing) => {
                             return (
-                                <Row key={listing._id} className="mt-5">
+                                <Row  key={listing._id} className="mt-5">
                         <IndividualListing listing={listing}></IndividualListing>
+                        <Link to={`/listing/${listing._id}`}>View Listing</Link>
                         </Row>
                             )
                         

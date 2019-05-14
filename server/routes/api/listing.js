@@ -7,75 +7,76 @@ const Bid = require('../../models/Bid')
 
 module.exports = (app) => {
     // create listing
-    app.post('/api/listing/create', (req,res,next) => {
-        const { body } = req; 
+    app.post('/api/listing/create', (req, res, next) => {
+        const { body } = req;
         const newListing = new Listing();
         params = [
-            'seller' ,
-            'name', 
-            'description', 
+            'seller',
+            'name',
+            'description',
             'price',
             'auction',
-            'endtime', 
+            'endtime',
             // 'status', 
-            'image', 
+            'image',
             'friendDiscount'];
-            missingFields=false;
-        missing=''; 
+        missingFields = false;
+        missing = '';
         params.forEach(param => {
-           
+
         if (body[param] == null) {
             missingFields = true
             missing += `${param}, `
-        } else {
-            newListing[param] = body[param]
-        }
+            } else {
+                newListing[param] = body[param]
+            }
         })
 
-    if (missingFields) {
-        return res.send({
-            success: false,
-            message: missing
-        })
-    }       
+        if (missingFields) {
+            return res.send({
+                success: false,
+                message: missing
+            })
+        }
         User.find({
             _id: body['seller']
         }, (err, users) => {
-            if (err) { return res.send({success: false, message: 'Error: no user'});};
+            if (err) { return res.send({ success: false, message: 'Error: no user' }); };
             newListing.save((err, listing) => {
-                if (err) { return res.send({success: false, message: 'Error: server error'});};
+                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                 console.log(listing)
                 return res.send({
                     success: true,
                     message: "Listing created.",
-                    data: {listing}
+                    data: { listing }
                 });
             });
         });
     });
     //update the status of a listing
-    app.put('/api/listing/update/:id', (req,res,next) => {
+    app.put('/api/listing/update/:id', (req, res, next) => {
         const id = req.params.id;
         const status = req.query.status
         const choices = ['pending', 'rejected', 'active', 'expired', 'escrow', 'closed'];
-        if (!choices.includes(status)) { 
+        if (!choices.includes(status)) {
             return res.send({
-                success: false, 
+                success: false,
                 status: status,
                 message: 'Error: query param must contain any of: ' + choices
             });
-        ;};
+            ;
+        };
         Listing.find({
             _id: id
         }, (err, listings) => {
             // console.log(listings)
-            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
-            if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
+            if (!listing) { return res.send({ success: false, message: 'Error: no listing' }); };
             Listing.findOneAndUpdate(
-                {_id: listing._id,}, 
-                {$set: {status: status}},
-                {returnOriginal: false},
+                { _id: listing._id, },
+                { $set: { status: status } },
+                { returnOriginal: false },
                 (err, listing) => {
                     console.log(status)
                     console.log(err)
@@ -91,93 +92,93 @@ module.exports = (app) => {
         });
     })
     // show all listings, regardless of status
-    app.get('/api/listing/all', (req,res,next) => {
+    app.get('/api/listing/all', (req, res, next) => {
         const term = req.params.term
         Listing.find({}, (err, listings) => {
             console.log(listings)
-            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
                 message: 'all listings',
-                data: {listings}
+                data: { listings }
             })
         });
     })
     // show specific listing by id
-    app.get('/api/listing/id/:id', (req,res,next) => {
+    app.get('/api/listing/id/:id', (req, res, next) => {
         const id = req.params.id;
         Listing.find({
             _id: id
         }, (err, listings) => {
             console.log(listings)
-            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
-            if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
+            if (!listing) { return res.send({ success: false, message: 'Error: no listing' }); };
             Bid.find({  // include all bids
                 listing: listing._id
             }, (err, bids) => {
-                if (err) { return res.send({success: false, message: 'Error: server error'});};
+                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                 return res.send({
                     success: true,
                     message: 'success',
-                    data: {listing, bids}
+                    data: { listing, bids }
                 })
             })
         });
     })
     // show active listings
-    app.get('/api/listing/search', (req,res,next) => {
+    app.get('/api/listing/search', (req, res, next) => {
         Listing.find({
             status: 'active'
         }, (err, listings) => {
             console.log(listings)
-            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
                 message: 'succesful search',
-                data: {listings}
+                data: { listings }
             })
         });
     })
     // search active listings
-    app.get('/api/listing/search/:term', (req,res,next) => {
+    app.get('/api/listing/search/:term', (req, res, next) => {
         const term = req.params.term
         Listing.find({
             $and: [
-                {status: 'active'},
-                {$text: {$search: term}}
+                { status: 'active' },
+                { $text: { $search: term } }
             ]
         }, (err, listings) => {
             console.log(listings)
-            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
                 message: 'succesful search',
-                data: {listings}
+                data: { listings }
             })
         });
     })
     // submit a bid to the given listing id
-    app.post('/api/listing/bid/:id', (req,res,next) => {
+    app.post('/api/listing/bid/:id', (req, res, next) => {
         const id = req.params.id;
-        const { body } = req; 
+        const { body } = req;
         const newBid = new Bid();
         newBid.listing = id;
         newBid.buyer = body.buyer;
         newBid.timestamp = Date.now();
         Listing.find({ // check if listing exists
             $and: [
-                {_id: id},
-                {status: 'active'}
+                { _id: id },
+                { status: 'active' }
             ]
         }, (err, listings) => {
             console.log(listings)
-            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
-            if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
-            if(listing.auction) // check if auction
-                if(!body.price) // check for price parameter
-                    return res.send({success: false, message: 'Error: missing price on auction listing'});
+            if (!listing) { return res.send({ success: false, message: 'Error: no listing' }); };
+            if (listing.auction) // check if auction
+                if (!body.price) // check for price parameter
+                    return res.send({ success: false, message: 'Error: missing price on auction listing' });
                 else
                     newBid.price = body.price;
             else
@@ -185,15 +186,15 @@ module.exports = (app) => {
             User.find({ // check if buyer exists
                 _id: body['buyer']
             }, (err, users) => {
-                if (err) { return res.send({success: false, message: 'Error: server error'});};
-                if(!users[0]) {return res.send({success: false, message: 'Error: no user'});};
+                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                if (!users[0]) { return res.send({ success: false, message: 'Error: no user' }); };
                 newBid.save((err, bid) => {
-                    if (err) { return res.send({success: false, message: 'Error: server error'});};
+                    if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                     console.log(bid)
                     return res.send({
                         success: true,
                         message: "Bid created.",
-                        data: {bid}
+                        data: { bid }
                     });
                 })
             })

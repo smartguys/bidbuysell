@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 // import axios from 'axios'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { Row, Col, Container, InputGroup, FormControl } from 'react-bootstrap'
+import { Row, Col, Container, InputGroup, FormControl, Alert } from 'react-bootstrap'
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
 import Files from "react-butterfiles";
 const addSubtractDate = require("add-subtract-date");
 import axios from 'axios'
+import Confirmation from '../Apply/Confirmation'
 
 class Sell extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             tags: [],
             files: [],
@@ -22,8 +23,12 @@ class Sell extends Component {
             endtime: '',
             image: '',
             friendDiscount: '',
-            seller: '',
-            length: ''
+            seller: props.userID,
+            price:'',
+            sellAlert: false,
+            sellAlertMessage: '',
+            sellAlertVariant: '',
+            submitted: false
         }
     }
 
@@ -35,29 +40,36 @@ class Sell extends Component {
 
     submit = e => {
         e.preventDefault();
-        var d = new Date();
-        d = addSubtractDate.add(d, this.state.length, "days")
-        console.log("date",d)
         axios.post('/api/listing/create', {
             name: this.state.name,
             description: this.state.description,
             auction: this.state.auction,
-            endtime: d,
+            price: this.state.price,
+            endtime: this.state.endtime,
             image: this.state.image,
             friendDiscount: this.state.friendDiscount,
             seller: this.state.seller
         }).then(res => {
+            console.log(res.data.success)
             switch (res.data.success) {
                 case false:
-                  console.log("failed")
-                  break;
+                    this.setState({
+                    sellAlert: true,
+                    sellAlertMessage: res.data.message,
+                    sellAlertVariant: 'danger'
+                    })
+                break;
                 case true:
-                console.log("submitted")
-
-                  break;
-              }
-        })
-      }
+                  this.setState({
+                    sellAlert: true,
+                    sellAlertMessage: res.data.message,
+                    sellAlertVariant: 'success',
+                    submitted: true
+                  })
+                break;
+            }
+      })
+    }
 
     handleChange = (tags) => {
         this.setState({ tags })
@@ -69,27 +81,56 @@ class Sell extends Component {
         })
     }
 
+    setTime = (length) => {
+        var current = new Date();
+        let endtime = addSubtractDate.add(current, length, "days")
+        this.setState({
+            endtime: endtime
+        })
+    }
+
+    calculateTime = e => {
+        let length = e.target.value
+        setTime(length[0]); 
+    }
+
+    componentDidMount() {
+        this.setTime(3); 
+    }
+
 
     render() {
-        var d = new Date();
-        console.log(addSubtractDate.add(d, 2, "days"))
+        let { sellAlert,
+            sellAlertMessage,
+            sellAlertVariant, submitted } = this.state;
+        
+        const handleHide = () => this.setState({ applyAlert: false })
+
+        if (submitted) {   
+            return (
+                <Confirmation></Confirmation>
+            )
+        }
 
         return (
             <Container>
                 <Row className="justify-content-center mt-5">
                     <h3>Sell an Item</h3>
                 </Row>
+                <Alert onClose={handleHide} show={sellAlert} dismissible variant={sellAlertVariant}>
+                {sellAlertMessage}
+                </Alert>
                 <Form onSubmit={this.submit}>
                 <Row >
                     <Col xs lg="8">
                     
                         <Form.Group controlId="formGroupTitle">
                             <Form.Label>Listing Title:</Form.Label>
-                            <Form.Control name="name" type="text" placeholder="Enter a descriptive title" />
+                            <Form.Control onChange={this.change} name="name" type="text" placeholder="Enter a descriptive title" />
                         </Form.Group>
                         <Form.Group controlId="exampleFormDescription">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control placeholder="Enter a brief description" name="description" as="textarea" rows="3" />
+                            <Form.Control onChange={this.change} placeholder="Enter a brief description" name="description" as="textarea" rows="3" />
                         </Form.Group>
                         <Form.Group controlId="exampleForm.Categories">
                             <Form.Label>Categories</Form.Label>
@@ -115,12 +156,12 @@ class Sell extends Component {
 
                                         />
                                     </div>))}
-                                <Form.Label>Starting Price:</Form.Label>
+                                <Form.Label>{(this.state.auction)? 'Starting Price' : 'Fixed Price'}</Form.Label>
                                 <InputGroup className="mb-3">
                                     <InputGroup.Prepend>
                                         <InputGroup.Text>$</InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <FormControl name="price" placeholder="Starting price" aria-label="Starting Price" />
+                                    <FormControl onChange={this.change} name="price" placeholder={(this.state.auction)? 'Starting Price' : 'Fixed Price'} aria-label="Starting Price" />
                                 </InputGroup>
 
 
@@ -162,7 +203,7 @@ class Sell extends Component {
                     <Col>
                     <Form.Group controlId="exampleFormListingLength">
                             <Form.Label>Listing Length</Form.Label>
-                            <Form.Control name="length" as="select">
+                            <Form.Control onChange={this.calculateTime} name="length" as="select">
                                 <option>3 days</option>
                                 <option>5 days</option>
                                 <option>7 days</option>
@@ -171,7 +212,7 @@ class Sell extends Component {
                         </Form.Group>
                         <Form.Group controlId="formGroupDiscount">
                             <Form.Label>Friend Discount:</Form.Label>
-                            <Form.Control name="friendDiscount" type="number" placeholder="Provide friend discount" />
+                            <Form.Control onChange={this.change} name="friendDiscount" type="number" placeholder="Provide friend discount" />
                         </Form.Group>
 
                         <Form.Group controlId="formGroupTags">

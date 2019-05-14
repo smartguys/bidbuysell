@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Product from './Product'
-//import ProductImage from './ProductImage';
 import CurrentPrice from './CurrentPrice';
 import BidAmount from './BidAmount';
 import SellerInfo from './SellerInfo';
-//import Description from './Description';
 import SearchBar from '../Search/Search'
 
 class Listing extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log(this.props.match.params.id)
+    }
+    
     render() {
         return (
             <Container fluid={true}>
@@ -16,7 +19,7 @@ class Listing extends React.Component {
                     <Col xs lg="8"><SearchBar></SearchBar></Col>
                     <Col></Col>
                 </Row>
-                <Row>
+                {/* <Row>
                     <Col><Product></Product>
                     </Col>
 
@@ -32,21 +35,8 @@ class Listing extends React.Component {
                  
                     </Col>              
               
-            </Row>
+            </Row> */}
             </Container>
-
-
-//  <Row><Description></Description></Row>
-// <Col><ProductImage></ProductImage></Col>
-
-            //     <HeaderWithName></HeaderWithName>
-            // <SearchBar></SearchBar> 
-            // <ProductInfo>
-            //     <Product></Product>  
-            //     <CurrentPrice></CurrentPrice>
-            //     <SellerInfo></SellerInfo>
-            //     <ProductDescription> 
-            // </ProductInfo>
         )
     }
 }

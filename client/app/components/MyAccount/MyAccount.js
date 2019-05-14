@@ -10,6 +10,7 @@ import TabPane from 'react-bootstrap/TabPane'
 class MyAccount extends React.Component {
     constructor(props, context) {
         super(props, context);
+        console.log(this.props.match.params.id)
     }
     render() {
         return(
