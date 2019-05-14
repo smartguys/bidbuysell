@@ -6,17 +6,21 @@ import CurrentPrice from '../Listing/CurrentPrice';
 import BidAmount from '../Listing/BidAmount';
 import SellerInfo from '../Listing/SellerInfo';
 
-class IndivudalListing extends Component {
+class IndividualListing extends Component {
     render() {
+        let {
+            listing
+        } = this.props
+
         return (
             <Container>
                 <Row>
                     <Col>
-                        <Product></Product>
+                        <Product listing={listing}></Product>
                     </Col>
                     <Col>
-                        <CurrentPrice></CurrentPrice>
-                        <SellerInfo></SellerInfo>
+                        <CurrentPrice listing={listing}></CurrentPrice>
+                        <SellerInfo seller={listing.seller}></SellerInfo>
                     </Col>
                 </Row>
             </Container>
@@ -24,4 +28,4 @@ class IndivudalListing extends Component {
     }
 }
 
-export default IndivudalListing;
+export default IndividualListing;

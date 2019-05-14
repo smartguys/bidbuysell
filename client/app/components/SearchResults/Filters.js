@@ -56,7 +56,7 @@ class Filters extends Component {
                         </Row>
 
                         <Row>
-                            <Col>
+                            {/* <Col>
                             <div key='auction'>
                                         <Form.Check
                                             custom
@@ -73,7 +73,7 @@ class Filters extends Component {
                                             label='Fixed'
                                         />
                                     </div>                         
-                            </Col>
+                            </Col> */}
                         </Row>
             </Container>
         );
