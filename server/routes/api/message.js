@@ -3,16 +3,6 @@ const MessageThread = MessageExports.MessageThread;
 const Message = MessageExports.Message;
 const User = require('../../models/User');
 
-
-/*const request = require('request');
-
-process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-  // application specific logging, throwing an error, or other logic here
-  //console.log('\n');
-});*/
-
-
 module.exports = (app) => {
 	//create message thread
 	app.post('/api/message/create', (req,res,next) => {
@@ -125,7 +115,7 @@ module.exports = (app) => {
 				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
 				//remove user from users list
             	if (!thread.users) {return res.send({success: false, message: 'Error: missing users in message thread'});}
-                var tmp = thread.users.filter(user => user != id);
+                var tmp = thread.users.filter(user => user._id != id);
                 thread.users = tmp;
                 //update
                 thread.save( (err, thread) => {
@@ -204,9 +194,9 @@ module.exports = (app) => {
 				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
             	if (!thread.users) {return res.send({success: false, message: 'Error: missing users in message thread'});}
             	//check that the sender is in the thread
-            	/*var hasUser = thread.users.reduce(function(res, el) {
-            		return res || (el._id == id);
-            	}, false);*/
+            	var hasUser = thread.users.reduce(function(res, el) {
+            		return res || (el._id == newMessage['sender']._id);
+            	}, false);
             	//message is good to go, send and save
             	thread.messages.push(newMessage);
 	        	thread.save( (err, thread) => {
@@ -234,10 +224,7 @@ module.exports = (app) => {
 			(err, thread) => {
 				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
             	if (!thread.messages) {return res.send({success: false, message: 'Error: missing messages in message thread'});}
-            	//console.log(typeof thread.messages[0]._id);
-            	//console.log(typeof msgid);
-            	//console.log(thread.messages[0]._id.toString() == msgid.toString());
-	        	var msgs = thread.messages.filter(msg => msg._id==msgid);
+	        	var msgs = thread.messages.filter(msg => msg._id == msgid);
 	        	if (msgs.length == 0) {return res.send({success: false, message: 'Error: message not found in thread'});}
 	        	thread.messages.forEach(msg => {
 	        		if (msg._id == msgid) {msg.isDelete = true;}
@@ -324,65 +311,4 @@ module.exports = (app) => {
 			}
 		);
 	});
-
-
-	/* //testing
-	app.get('/test', (req,res,next) => {
-		console.log('?');
-		var j,k;
-		request.post(
-		    'http://localhost:8080/api/message/create',
-		    { json: { users: [],
-		    		  messages: [] 
-		    		} 
-		    },
-		    function (error, response, body) {
-		        console.log("HI");
-		        console.log(body);
-		        console.log("HI");
-		        j = body.data._id;
-		    }
-		);
-
-
-		u = new User(); 
-		setTimeout( function() {
-
-			console.log("A");
-			console.log(j);
-			console.log("A");
-
-			request.post(
-		    'http://localhost:8080/api/message/addmsg/'+j,
-		    { json: { sender: u,
-		    		  content: "yeehaw"
-		    		} 
-		    },
-		    function (error, response, body) {
-		        console.log(body);
-		        k = body.data.messages[0]._id;
-		        console.log("IS DELETED?");
-		        console.log(body.data.messages[0].isDelete);
-		    }
-		)}, 5000);
-
-		setTimeout( function() {
-
-			console.log("A");
-			console.log(k);
-			console.log("A");
-
-			request.post(
-		    'http://localhost:8080/api/message/removemsg/'+j+'/'+k,
-		    { json: {} 
-		    },
-		    function (error, response, body) {
-		        console.log(body);
-		        console.log("IS DELETED?");
-		        console.log(body.data.messages[0].isDelete);
-		    }
-		)}, 10000);
-
-	});*/
-
 }
