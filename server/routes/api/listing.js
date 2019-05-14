@@ -119,7 +119,6 @@ module.exports = (app) => {
     })
     // show active listings
     app.get('/api/listing/search', (req,res,next) => {
-        const term = req.params.term
         Listing.find({
             status: 'active'
         }, (err, listings) => {
