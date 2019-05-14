@@ -17,7 +17,7 @@ module.exports = (app) => {
             'price',
             'auction',
             'endtime', 
-            'status', 
+            // 'status', 
             'image', 
             'friendDiscount'];
         params.forEach(param => {
@@ -45,6 +45,56 @@ module.exports = (app) => {
             });
         });
     });
+    //update the status of a listing
+    app.put('/api/listing/update/:id', (req,res,next) => {
+        const id = req.params.id;
+        const status = req.query.status
+        const choices = ['pending', 'rejected', 'active', 'expired', 'escrow', 'closed'];
+        if (!choices.includes(status)) { 
+            return res.send({
+                success: false, 
+                status: status,
+                message: 'Error: query param must contain any of: ' + choices
+            });
+        ;};
+        Listing.find({
+            _id: id
+        }, (err, listings) => {
+            // console.log(listings)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            const listing = listings[0]
+            if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
+            Listing.findOneAndUpdate(
+                {_id: listing._id,}, 
+                {$set: {status: status}},
+                {returnOriginal: false},
+                (err, listing) => {
+                    console.log(status)
+                    console.log(err)
+                    console.log(listing.status)
+                    // the returnOriginal option doesnt see to work, 
+                    // where I want to return the modified object, so just respond 'success', for now.
+                    return res.send({
+                        success: true,
+                        message: 'success',
+                    })
+                }
+            )
+        });
+    })
+    // show all listings, regardless of status
+    app.get('/api/listing/all', (req,res,next) => {
+        const term = req.params.term
+        Listing.find({}, (err, listings) => {
+            console.log(listings)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            return res.send({
+                success: true,
+                message: 'all listings',
+                data: {listings}
+            })
+        });
+    })
     // show specific listing by id
     app.get('/api/listing/id/:id', (req,res,next) => {
         const id = req.params.id;
@@ -55,8 +105,7 @@ module.exports = (app) => {
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             const listing = listings[0]
             if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
-            // perhaps include all bids
-            Bid.find({
+            Bid.find({  // include all bids
                 listing: listing._id
             }, (err, bids) => {
                 if (err) { return res.send({success: false, message: 'Error: server error'});};
