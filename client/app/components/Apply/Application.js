@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Form, FormControl, Button, Dropdown, DropdownButton } from 'react-bootstrap'
+import { Container, Row, Col, Form, FormControl, Button, Dropdown, DropdownButton, Alert } from 'react-bootstrap'
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import axios from 'axios'
+import Confirmation from './Confirmation'
 
 class Application extends Component {
     constructor(props) {
@@ -24,6 +25,10 @@ class Application extends Component {
             issuer: '',
             focused: '',
             formData: null,
+            applyAlert: false,
+            applyAlertMessage: '',
+            applyAlertVariant: '',
+            submitted: false
         };
     }
 
@@ -52,28 +57,45 @@ class Application extends Component {
             city: this.state.city,
             state: this.state.state,
             zip: this.state.zip,
-            creditCard: this.state.number,
             },
+            creditCard: this.state.number,
             phone: this.state.phone
         }).then(res => {
-          switch (res.data.success) {
-            case false:
-              console.log(res.data.message);
-                
-              break;
-            case true:
-            console.log(res.data.message);
-            //   this.login()
-            //   this.props.history.push('/myaccount')
-              break;
-          }
+            switch (res.data.success) {
+                case false:
+                  this.setState({
+                    applyAlert: true,
+                    applyAlertMessage: res.data.message,
+                    applyAlertVariant: 'danger'
+                  })
+                  break;
+                case true:
+                  localStorage.setItem('cool-jwt', res.data.token);
+                  this.setState({
+                    applyAlert: true,
+                    applyAlertMessage: res.data.message,
+                    applyAlertVariant: 'success',
+                    submitted: true
+                  })
+                  break;
+              }
         })
       }
 
 
     render() {
-        const { firstName, lastName, email, userName, 
-            street, city, state, zip, phone, name, number, expiry, cvc, focused, issuer } = this.state;
+        let { firstName, lastName, email, userName, 
+            street, city, state, zip, phone, name, number, expiry, cvc, focused, issuer,applyAlert,
+            applyAlertMessage,
+            applyAlertVariant, submitted } = this.state;
+        
+        const handleHide = () => this.setState({ applyAlert: false })
+
+        if (submitted) {   
+            return (
+                <Confirmation firstName={firstName}></Confirmation>
+            )
+        }
 
         return (
             <Container>
@@ -83,6 +105,9 @@ class Application extends Component {
                 <Row className="justify-content-center">
                     <h5>Register a new account</h5>
                 </Row>
+                <Alert onClose={handleHide} show={applyAlert} dismissible variant={applyAlertVariant}>
+                {applyAlertMessage}
+                </Alert>
                 <Form onSubmit={this.submit}>
                 <Row className="mt-5">
                     <Col>
