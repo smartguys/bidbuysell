@@ -10,9 +10,8 @@ class App extends Component {
 
   render() {
     const {
-      userName,
-      logout
-    } = this.props
+      userName
+     } = this.props
     
 
     const children = React.Children.map(this.props.children, (child, index) => {
@@ -23,7 +22,7 @@ class App extends Component {
 
     return (
       <Container fluid={true}>
-        <HeaderWithName userName={userName} logout={logout}/>
+        <HeaderWithName userName={userName}/>
         { children }
       </Container>
     )
