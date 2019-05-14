@@ -10,8 +10,10 @@ class App extends Component {
 
   render() {
     const {
-      userName
+      userName,
+      logout
     } = this.props
+    
 
     const children = React.Children.map(this.props.children, (child, index) => {
       return React.cloneElement(child, {
@@ -21,7 +23,7 @@ class App extends Component {
 
     return (
       <Container fluid={true}>
-        <HeaderWithName userName={userName}/>
+        <HeaderWithName userName={userName} logout={logout}/>
         { children }
       </Container>
     )

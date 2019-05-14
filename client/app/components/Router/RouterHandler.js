@@ -37,7 +37,6 @@ class RouterHandler extends Component {
   }
 
   login = () => {
-    console.log("This ran")
     const jwt = getJwt();
     if (jwt) {
       Axios.get('/verify', {
@@ -56,6 +55,13 @@ class RouterHandler extends Component {
     }
   }
 
+  logout = () => {
+    localStorage.removeItem('cool-jwt')
+    this.setState({
+      userName: ''
+    })
+  }
+
     render() {
       const {
         userName
@@ -63,7 +69,7 @@ class RouterHandler extends Component {
 
     return(
     <Router>
-    <App userName={userName} login={this.login}>
+    <App userName={userName} login={this.login} logout={this.logout}>
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route path="/listing" component={Listing}/>

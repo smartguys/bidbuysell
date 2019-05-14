@@ -20,16 +20,24 @@ module.exports = (app) => {
             // 'status', 
             'image', 
             'friendDiscount'];
+            missingFields=false;
+        missing=''; 
         params.forEach(param => {
-            if(body[param] == null) {
-                return res.send({
-                    success: false,
-                    message: "missing: " + param,
-                }); 
-            } else {
-                newListing[param] = body[param]
-            } 
+           
+        if (body[param] == null) {
+            missingFields = true
+            missing += `${param}, `
+        } else {
+            newListing[param] = body[param]
+        }
         })
+
+    if (missingFields) {
+        return res.send({
+            success: false,
+            message: missing
+        })
+    }       
         User.find({
             _id: body['seller']
         }, (err, users) => {
