@@ -1,17 +1,24 @@
 const axios = require('axios')
 
-function login(username, password, callback) {
+const base_url = 'http://localhost:8080/api/'
+
+module.exports.signin = (username, password, callback) => {
+    console.log('signin')
     axios.post(
-        'localhost:8080/api/account/signin',
+        base_url + 'account/signin',
         {
             userName: username,
             password: password
         }
     ).then(res => {
-        console.log(res)
-    }).catch(res => {
-        console.log(res.data)
+        callback(res.data)
+    }).catch(err => {
+        callback({ success: false, message: 'Error: could not reach backend'})
     })
 }
 
-login('ok', 'ok')
+// TEST:
+
+// module.exports.signin('a', 'b', (res) => {
+//     console.log(res)
+// })
