@@ -20,12 +20,19 @@ const MessageSchema = new mongoose.Schema({
 	}
 });
 
+var Message = mongoose.model('Message', MessageSchema);
+
 const MessageThreadSchema = new mongoose.Schema({
 	users : [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	}],
-	messages : [MessageSchema]
+	messages : [Message.schema]
 });
 
-module.exports = mongoose.model('MessageThread', MessageThreadSchema);
+var MessageThread = mongoose.model('MessageThread', MessageThreadSchema);
+
+module.exports = {
+	Message,
+	MessageThread
+};

@@ -65,7 +65,6 @@ module.exports = (app) => {
 				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
 				//append user to users list
 				const thread = threads[0];
-            	if (!thread) {return res.send({success: false, message: 'Error: no message thread'});}
             	if (!thread.users) {return res.send({success: false, message: 'Error: missing users in message thread'});}
                 else {thread.users.push(id);}
                 //update
@@ -96,18 +95,15 @@ module.exports = (app) => {
 			}
 		);
 		//check that messagethread exists
-		MessageThread.find({
+		MessageThread.findOne({
 				_id: threadid
 			},
-			(err, threads) => {
+			(err, thread) => {
 				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
 				//remove user from users list
-				const thread = threads[0];
-            	if (!thread) {return res.send({success: false, message: 'Error: no message thread'});}
             	if (!thread.users) {return res.send({success: false, message: 'Error: missing users in message thread'});}
-                else {
-                	var tmp = thread.users.filter(user => user != id);
-                	thread.users = tmp;}
+                var tmp = thread.users.filter(user => user != id);
+                thread.users = tmp;}
                 //update
                 thread.save( (err, thread) => {
 		        	if (err) {
@@ -124,8 +120,24 @@ module.exports = (app) => {
 	});
 
 	//get users in thread
-	app.post('/api/message/getusers/:threadid', (req,res,next) => {
+	app.get('/api/message/getusers/:threadid', (req,res,next) => {
+		const threadid = req.params.threadid;
+		//check that messagethread exists
+		MessageThread.findOne({
+				_id: threadid
+			},
+			(err, thread) => {
+				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
+            	if (!thread.users) {return res.send({success: false, message: 'Error: missing users in message thread'});}
+	        	return res.send({
+	                success: true,
+	                message: "success",
+	                data: {thread.users}
+	            });
+			}
+		);
 	});
+
 
 	/*
 	MESSAGES
@@ -133,6 +145,51 @@ module.exports = (app) => {
 
 	//add message to thread
 	app.post('/api/message/addmsg/:threadid', (req,res,next) => {
+		const {body} = req;
+		const newMessage = new Message();
+		params = [
+			'sender',
+			'date',
+			'content',
+			'isDelete'
+		];
+		params.forEach(param => {
+			if(body[param] == null) {
+                return res.send({
+                    success: false,
+                    message: "missing: " + param,
+                }); 
+            } else {
+                newMessage[param] = body[param];
+            } 
+		});
+		//check that the content is nonempty:
+		if (!newMessage['content']) {return res.send({success: false, message: 'Error: no message content'});}
+		//check the relevant thread exists
+		MessageThread.findOne({
+				_id: threadid
+			},
+			(err, thread) => {
+				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
+            	if (!thread.users) {return res.send({success: false, message: 'Error: missing users in message thread'});}
+            	//check that the sender is in the thread
+            	var hasUser = thread.users.reduce(function(res, el) {
+            		return res || (el._id == id);
+            	}, false);
+            	//message is good to go, send and save
+            	thread.messages.push(newMessage);
+	        	thread.save( (err, thread) => {
+		        	if (err) {
+		        		return res.send({success: false, message: 'Error: server error'});
+		        	}
+		        	return res.send({
+		                success: true,
+		                message: "Message sent to message thread.",
+		                data: {thread}
+		            });
+		    	});
+			}
+		);
 	});
 
 	//delete message
@@ -145,15 +202,15 @@ module.exports = (app) => {
 	*/
 
 	//get all messages
-	app.post('/api/message/getallmsg/:threadid', (req,res,next) => {
+	app.get('/api/message/getallmsg/:threadid', (req,res,next) => {
 	});
 
 	//get messages from a user
-	app.post('/api/message/getallusermsg/:threadid/:id', (req,res,next) => {
+	app.get('/api/message/getallusermsg/:threadid/:id', (req,res,next) => {
 	});
 
 	//get specific message
-	app.post('/api/message/getmsg/:threadid/:id', (req,res,next) => {
+	app.get('/api/message/getmsg/:threadid/:id', (req,res,next) => {
 	});
 
 }
