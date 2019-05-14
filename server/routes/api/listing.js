@@ -20,16 +20,22 @@ module.exports = (app) => {
             // 'status', 
             'image', 
             'friendDiscount'];
+        missingFields=false;
+        missing=''; 
         params.forEach(param => {
-            if(body[param] == null) {
-                return res.send({
-                    success: false,
-                    message: "missing: " + param,
-                }); 
+            if (body[param] == null) {
+                missingFields = true
+                missing += `${param}, `
             } else {
                 newListing[param] = body[param]
-            } 
-        })
+            };
+        });
+        if (missingFields) {
+            return res.send({
+                success: false,
+                message: missing
+            });
+        }       
         User.find({
             _id: body['seller']
         }, (err, users) => {
@@ -84,7 +90,6 @@ module.exports = (app) => {
     })
     // show all listings, regardless of status
     app.get('/api/listing/all', (req,res,next) => {
-        const term = req.params.term
         Listing.find({}, (err, listings) => {
             console.log(listings)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
@@ -114,6 +119,21 @@ module.exports = (app) => {
                     message: 'success',
                     data: {listing, bids}
                 })
+            })
+        });
+    })
+    // show all listings submitted by seller
+    app.get('/api/listing/seller/:id', (req,res,next) => {
+        const id = req.params.id
+        Listing.find({
+            seller: id
+        }, (err, listings) => {
+            console.log(listings)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            return res.send({
+                success: true,
+                message: 'all listings by seller',
+                data: {listings}
             })
         });
     })
@@ -166,7 +186,7 @@ module.exports = (app) => {
             console.log(listings)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             const listing = listings[0]
-            if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
+            if(!listing) {return res.send({success: false, message: 'Error: no active listing'});};
             if(listing.auction) // check if auction
                 if(!body.price) // check for price parameter
                     return res.send({success: false, message: 'Error: missing price on auction listing'});

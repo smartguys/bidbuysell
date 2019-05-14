@@ -73,7 +73,7 @@ class SearchResults extends Component {
                     <Col>
                         {listings.map( (listing) => {
                             return (
-                                <Row className="mt-5">
+                                <Row key={listing._id} className="mt-5">
                         <IndividualListing listing={listing}></IndividualListing>
                         </Row>
                             )
