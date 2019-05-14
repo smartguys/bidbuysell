@@ -17,7 +17,7 @@ class Listing extends React.Component {
                     <Col></Col>
                 </Row>
                 <Row>
-                    <Col><Product></Product>
+                    <Col>
                     </Col>
 
                     <Col>

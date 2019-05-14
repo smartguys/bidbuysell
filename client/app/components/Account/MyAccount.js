@@ -7,7 +7,6 @@ import TabPane from 'react-bootstrap/TabPane'
 
 
 
-// Where we start: My Account Overview Page
 class MyAccount extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -85,38 +84,7 @@ class MyAccount extends React.Component {
 
 export default MyAccount;
 
-        /*  
-               <>
-             <Tabs
-               id="controlled-tab-example"
-               activeKey={this.state.key}
-               onSelect={key => this.setState({ key })}
-             >
-               <Tab eventKey="overview" title="Overview">
-                 <Sonnet />
-               </Tab>
-               <Tab eventKey="profile" title="Profile">
-                 <Sonnet />
-               </Tab>
-               <Tab eventKey="contact" title="Contact" disabled>
-     
-               <Tab eventKey="overview" title="Overview">
-                 <Sonnet />
-               </Tab>
-               <Tab eventKey="overview" title="Overview">
-                 <Sonnet />
-               </Tab>
-               <Tab eventKey="overview" title="Overview">
-                 <Sonnet />
-               </Tab>
-               <Tab eventKey="overview" title="Overview">
-                 <Sonnet />
-               </Tab>
-     
-                 <Sonnet />
-               </Tab>
-             </Tabs>
-          */
+    
 
 
 /*         My Account Buying Page

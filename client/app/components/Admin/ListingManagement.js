@@ -13,4 +13,4 @@ class ListingManagement extends Component {
         )
     }
 }
-    export default ListingManagement;
+export default ListingManagement;
