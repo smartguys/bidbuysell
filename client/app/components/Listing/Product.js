@@ -30,12 +30,6 @@ class Product extends React.Component{
             </CardGroup>
         
 
-
-
-    // {  <div>
-          //  <h3>Product Name</h3>
-           // <h4>Subtitle</h4>          
-           //</div> } 
  
         )
     }
