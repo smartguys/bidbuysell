@@ -122,6 +122,21 @@ module.exports = (app) => {
             })
         });
     })
+    // show all listings submitted by seller
+    app.get('/api/listing/seller/:id', (req,res,next) => {
+        const id = req.params.id
+        Listing.find({
+            seller: id
+        }, (err, listings) => {
+            console.log(listings)
+            if (err) { return res.send({success: false, message: 'Error: server error'});};
+            return res.send({
+                success: true,
+                message: 'all listings by seller',
+                data: {listings}
+            })
+        });
+    })
     // show active listings
     app.get('/api/listing/search', (req,res,next) => {
         Listing.find({
