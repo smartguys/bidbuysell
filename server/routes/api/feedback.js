@@ -55,7 +55,7 @@ module.exports = (app) => {
                 message: "Feedback created.",
                 data: feedback
             });
-		})
+		});
 	});
 
 	//update feedback
@@ -95,7 +95,7 @@ module.exports = (app) => {
 			},
 			(err, feedback) => {
 				if (err) {return res.send({success: false, message: 'Error: no feedback'});}
-				//replace content and save
+				//delete and save
 				feedback.isDelete = true;
 				feedback.save( (err, feedback) => {
 					if (err) {
