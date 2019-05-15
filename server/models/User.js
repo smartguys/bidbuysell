@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
       type: String,
-      enum: statusArray
+      enum: statusArray,
       default: 'firstTime'
   },
   isVip: {

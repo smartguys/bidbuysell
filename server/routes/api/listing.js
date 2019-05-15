@@ -5,7 +5,7 @@ let jwtProcess = require('../../jwt');
 const User = require('../../models/User')
 const Bid = require('../../models/Bid')
 const Transaction = require('../../models/Transaction')
-const Transaction = require('../../models/Friendship')
+const Friendship = require('../../models/Friendship')
 
 module.exports = (app) => {
     // create listing
