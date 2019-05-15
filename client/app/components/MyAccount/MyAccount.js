@@ -47,7 +47,7 @@ class MyAccount extends React.Component {
                         <Tab.Content>
                             <Tab.Pane eventKey="profile">
                                 {/* <Overview /> */}
-                                <Profile userId={'5cda14ea6b14503b45cbd66d'}/>
+                                <Profile userId={this.props.userId}/>
                             </Tab.Pane>
                             
                             
