@@ -26,17 +26,17 @@ class MessageThreadManagement extends Component {
     threads_render = () => {
         return(
             this.state.threads
-            ?   this.state.threads.map(thread => {
-                    return(
-                        <Row key={thread._id}>
-                            ({thread._id})
-                            ({thread.users.length})
-                            ({thread.messages.length})
-                            ({thread.messages.slice(-1)[0].date})
-                        </Row>
-                    )
-                })
-            :   null
+                ?   this.state.threads.map(thread => {
+                        return(
+                            <Row key={thread._id}>
+                                ({thread._id})
+                                ({thread.users.length})
+                                ({thread.messages.length})
+                                ({thread.messages.slice(-1)[0].date})
+                            </Row>
+                        )
+                    })
+                :   null
         )
     }
 
