@@ -264,7 +264,7 @@ module.exports = (app) => {
                     user.totalMoneySpent += disc*listing.price;
                 }
                 //check if buying user becomes a vip after this
-                if (!user.isVip && user.totalMoneySpent >= 500) {
+                if (!user.isVip && user.totalMoneySpent >= 500 && user.complaintcount <= 1) {
                     user.isVip = true;
                 }
                 listing.save( (err, listing) => {
