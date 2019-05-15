@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
 import Product from './Product'
 import CurrentPrice from './CurrentPrice';
 import BidAmount from './BidAmount';
@@ -19,12 +19,25 @@ class Listing extends React.Component {
             bids: [],
             bid: '',
             winner: '',
-            status: ''
+            status: '',
+            temp: '',
+            listing_id: this.props.match.params.id,
+            loginAlert: false,
+            loginAlertMessage: '',
+            loginAlertVariant: ''
+
         })
     }
 
     componentDidMount() {
         this.getListing()
+    }
+
+    timeadjust = () => {
+        let temp = new Date()
+        this.setState({
+            temp:temp
+        })
     }
 
     setWinner = (winner) => {
@@ -63,7 +76,7 @@ class Listing extends React.Component {
                         listing: res.data.data.listing,
                         bids: res.data.data.bids,
                         status: res.data.data.listing.status
-                    })
+                    }, () => this.timeadjust())
                     break;
             }
         })
@@ -77,6 +90,10 @@ class Listing extends React.Component {
 
     submit = e => {
         e.preventDefault();
+        if (!this.state.listing.auction) {
+            this.state.bid = this.state.listing.price
+            console.log("fixed price")
+        }
         axios.post(`/api/listing/bid/${this.state.listing._id}`, {
             buyer: this.props.userID,
             price: this.state.bid
@@ -87,8 +104,28 @@ class Listing extends React.Component {
                     this.getListing()
                     break;
                 case false:
-                    console.log(false); 
+                this.setState({
+                    loginAlert: true,
+                    loginAlertMessage: "must be logged into bid",
+                    loginAlertVariant: 'danger'
+                    }); 
                     break;
+            }
+        })
+    }
+
+    updateListing = () => {
+        console.log("listing closed")
+        axios.put(`/api/listing/update/${this.state.listing_id}?status=closed`)
+        .then( res => {
+            switch(res.data.success) {
+                case true:
+                    this.setState({
+                        status: 'closed',
+                    });
+                case false:
+                   console.log(res.data.message);
+                   break; 
             }
         })
     }
@@ -100,10 +137,16 @@ class Listing extends React.Component {
         } = this.state;
         let {
             winner,
-            status
+            status,
+            loginAlert,
+            loginAlertMessage,
+            loginAlertVariant
         } = this.state
 
         let endtime = new Date(listing.endtime)
+
+        // const endtime = this.state.temp
+
 
         const renderer = ({ days, hours, minutes, seconds, completed }) => {
             if (completed) {
@@ -114,6 +157,8 @@ class Listing extends React.Component {
               return <span>{days} days, {hours} hours, {minutes} minutes, {seconds}, seconds</span>;
             }
           };
+
+          const handleHide = () => this.setState({ loginAlert: false })
 
         return (
             <Container fluid={true}>
@@ -127,6 +172,9 @@ class Listing extends React.Component {
                     </Col>
 
                     <Col>
+                    <Alert onClose={handleHide} show={loginAlert} dismissible variant={loginAlertVariant}>
+                        {loginAlertMessage}
+                    </Alert>
                     <Container style={{ display: (status === 'active') ? 'block' : 'none' }}>
                         <Row>
                             <SellerInfo seller={listing.seller}></SellerInfo>
@@ -137,7 +185,7 @@ class Listing extends React.Component {
                             <h5>Time Remaining</h5>
                         </Row>
                             <Row style={{ display: (winner === '') ? 'block' : 'none' }}>
-                        <Countdown renderer={renderer} date={endtime}>
+                        <Countdown onComplete={() => this.updateListing()} renderer={renderer} date={endtime}>
                             </Countdown></Row>
                             </Container>
                         </Row>

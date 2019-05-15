@@ -21,7 +21,7 @@ class BidTable extends Component {
                                 <tr>
                                     <th>Timestamp</th>
                                     <th>Buyer</th>
-                                    <th>Bid</th>
+                                    <th>Price</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

@@ -18,7 +18,7 @@ class Admin extends Component {
             key: 'overview',
             applications: [],
             users: [],
-            listings: []
+            listings: [],
         };
     }
 

@@ -29,7 +29,7 @@ class BidAmount extends React.Component {
             bids
         } = this.props
         if (bids.length != 0) {
-            price = bids[bids.length-1].price
+            price = bids[bids.length - 1].price
         }
         return (
             <Container>
@@ -51,8 +51,11 @@ class BidAmount extends React.Component {
                     </Form>
                 </Row>
                 <Row>
-                    <Button style={{ display: (!auction) ? 'block' : 'none' }} type="submit" variant="secondary">Buy Now</Button>
+                    <Form onSubmit={this.props.submit}>
+                        <Button style={{ display: (!auction) ? 'block' : 'none' }} type="submit" variant="secondary">Buy Now</Button>
+                    </Form>
                 </Row>
+
             </Container>
         )
     }

@@ -30,7 +30,8 @@ class RouterHandler extends Component {
 
         this.state = {
           userName: '',
-          userID: ''
+          userID: '',
+          isAdmin: ''
         };
     }
 
@@ -49,10 +50,9 @@ class RouterHandler extends Component {
       }).then(res => {
         this.setState({
           userName: res.data.message.userName,
-          userID: res.data.message.userID
+          userID: res.data.message.userID,
+          isAdmin: res.data.message.isAdmin
         });
-        console.log("username:",this.state.userName); 
-        console.log("userid:",this.state.userID); 
 
       }).catch(err => {
         localStorage.removeItem('cool-jwt')
@@ -71,12 +71,13 @@ class RouterHandler extends Component {
     render() {
       const {
         userName,
-        userID
+        userID,
+        isAdmin
       } = this.state; 
 
     return(
     <Router>
-    <App userName={userName} login={this.login} logout={this.logout}>
+    <App userName={userName} login={this.login} logout={this.logout} isAdmin={isAdmin}>
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route path="/listing/:id" render={(props) => <Listing {...props} userID={userID}/>} />
@@ -86,9 +87,9 @@ class RouterHandler extends Component {
         <Route path="/search" component={SearchResults}/>
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
-        <Route path="/myaccount" component={MyAccount}/>
+        <Route path="/myaccount" component={(isAdmin)? Admin : MyAccount}/>
         <Route path="/test" component={Test}/>
-        <Route path="/admin" component={Admin}/>
+        {(isAdmin)? <Route path="/admin" render={(props) => <Admin {...props} isAdmin={isAdmin} userID={userID}/>}/> : null }
         <Route component={NotFound}/>
       </Switch>
     </App>
