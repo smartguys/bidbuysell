@@ -7,6 +7,7 @@ import AppManagement from './AppManagement';
 import UserManagement from './UserManagement';
 import ListingManagement from './ListingManagement';
 import TransactionsManagement from './TransactionsManagement';
+import MessageThreadManagement from './MessageThreadManagement';
 //import Messages from MyAccount;
 
 class Admin extends Component {
@@ -36,6 +37,9 @@ class Admin extends Component {
                             <Nav.Item>
                                 <Nav.Link eventKey="transactions">Transactions</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="messagethreads">Message Threads</Nav.Link>
+                            </Nav.Item>
 
                         </Nav>
                     </Col>
@@ -52,6 +56,9 @@ class Admin extends Component {
                             </Tab.Pane>
                             <Tab.Pane eventKey="transactions">
                                 <TransactionsManagement/>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="messagethreads">
+                                <MessageThreadManagement/>
                             </Tab.Pane>
                         </Tab.Content>
                     </Col>
