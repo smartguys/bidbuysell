@@ -11,6 +11,7 @@ module.exports = (app) => {
     // close a given listing with the given bid as a parameter
     app.post('/api/transaction/submit/:id', (req,res,next) => {
         const id = req.params.id;
+        const { body } = req;
         Bid.find({
             _id: id
         }, (err, bids) => {
@@ -23,7 +24,7 @@ module.exports = (app) => {
                 if (err) { return res.send({success: false, message: 'Error: server error'});};
                 const listing = listings[0];
                 if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
-                if(listing.status != 'active') {return res.send({success: false, message: 'Error: listing not active'});};
+                if(listing.status == 'closed') {return res.send({success: false, message: 'Error: listing already closed'});};
                 newTransaction = new Transaction()
                 newTransaction.listing = bid.listing;
                 newTransaction.seller = listing.seller;
@@ -31,22 +32,19 @@ module.exports = (app) => {
                 newTransaction.price = bid.price;
                 newTransaction.timestamp = Date.now();
                 newTransaction.bid = bid;
+                newTransaction.note = body.note;
                 newTransaction.save((err, transaction) => {
                     if (err) { return res.send({success: false, message: 'Error: server error'});};
-                    Listing.findOneAndUpdate(
-                        {_id: bid.listing,}, 
-                        {$set: {status: 'closed'}},
-                        {returnOriginal: false},
-                        (err, listing) => {
-                            // the returnOriginal option doesnt see to work, 
-                            // where I want to return the modified object, so just respond 'success', for now.
-                            return res.send({
-                                success: true,
-                                message: 'success',
-                                data: {transaction}
-                            });
-                        }
-                    );
+                    listing.status = 'closed'
+                    listing.save((err, listing) => {
+                        console.log(listing)
+                        if (err) { return res.send({success: false, message: 'Error: server error'});};
+                        return res.send({
+                            success: true,
+                            message: 'success',
+                            data: {listing, transaction}
+                        });
+                    });
                 });
             });
         });

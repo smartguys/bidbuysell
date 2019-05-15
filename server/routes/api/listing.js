@@ -213,4 +213,36 @@ module.exports = (app) => {
             });
         });
     });
+
+    //set winner of listing
+    app.post('/api/listing/setwinner/:listingid/:userid', (res,req,next) => {
+        const listingid = req.params.listingid;
+        const userid = req.params.userid;
+        Listing.find({ // check if listing exists
+            $and: [
+                { _id: listingid },
+                { status: 'active' }
+            ]
+        }, (err, listings) => {
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+            const listing = listings[0]
+            if(!listing) {return res.send({success: false, message: 'Error: no active listing'});};
+            User.find({ // check if buyer exists
+                _id: userid
+            }, (err, users) => {
+                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                if (!users[0]) { return res.send({ success: false, message: 'Error: no user' }); };
+                //we are good to update
+                listing.winner = userid;
+                listing.save( (err, listing) => {
+                    if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                    return res.send({
+                        success: true,
+                        message: 'listing winner updated',
+                        data: {listing}
+                    });
+                });
+            });
+        });
+    });
 }
