@@ -201,7 +201,7 @@ module.exports = (app) => {
                         return res.send({success: false, message: 'Error: missing price on auction listing'});
                     } else {
                         newBid.price = body.price;
-                        listing.price = body.price;
+                        listing.price = Math.max(listing.price, body.price);
                         newBid.save((err, bid) => { // save newBid
                             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                             listing.save((err, listing) => { //update listing
@@ -221,8 +221,8 @@ module.exports = (app) => {
                         console.log(bid)
                         return res.send({
                             success: true,
-                            message: "Bid created.",
-                            data: { bid }
+                            message: "bid created for fixed-price listing",
+                            data: {bid}
                         });
                     })
                 }
