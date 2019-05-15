@@ -160,7 +160,6 @@ module.exports = (app) => {
 				thread.users.forEach(user => {
 					if (user._id == userid) {
 						hasUser = true;
-						break;
 					}
 				});
 				return hasUser;

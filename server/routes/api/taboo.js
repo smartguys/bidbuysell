@@ -2,6 +2,8 @@ const TabooWordExports = require('../../models/TabooWords');
 const TabooWord = TabooWordExports.TabooWord;
 const TabooWordList = TabooWordExports.TabooWordList;
 
+const request = require('request');
+
 module.exports = (app) => {
 	//create taboo word
 	app.post('/api/taboo/create', (req,res,next) => {
@@ -51,17 +53,17 @@ module.exports = (app) => {
 	});
 
 	//delete taboo word by id
-	app.post('/api/taboo/delete/:id', (req,res,next) => {
+	app.post('/api/taboo/deleteid/:id', (req,res,next) => {
 		const wordid = req.params.id;
 		TabooWordList.getSingleton((err, list) => {
 			if (err) {return res.send({success: false, message: 'Error: taboo word list not found'});}
 			if (!list.words) {return res.send({success: false, message: 'Error: missing word list in taboo words'});}
 			//check that word exists
-        	var wds = thread.messages.filter(wd => wd._id == id);
+        	var wds = list.words.filter(wd => wd._id == wordid);
         	if (wds.length == 0) {return res.send({success: false, message: 'Error: word not found in list'});}
         	//delete
-        	thread.messages.forEach(wd => {
-        		if (wd._id == id) {wd.isDelete = true;}
+        	list.words.forEach(wd => {
+        		if (wd._id == wordid) {wd.isDelete = true;}
         	});
 			//word is deleted, save
 	    	list.save( (err, list) => {
@@ -78,16 +80,16 @@ module.exports = (app) => {
 	});
 
 	//delete taboo word by word
-	app.post('/api/taboo/delete/:word', (req,res,next) => {
+	app.post('/api/taboo/deleteword/:word', (req,res,next) => {
 		const word = req.params.word;
 		TabooWordList.getSingleton((err, list) => {
 			if (err) {return res.send({success: false, message: 'Error: taboo word list not found'});}
 			if (!list.words) {return res.send({success: false, message: 'Error: missing word list in taboo words'});}
 			//check that word exists
-        	var wds = thread.messages.filter(wd => wd.word == word);
+        	var wds = list.words.filter(wd => wd.word == word);
         	if (wds.length == 0) {return res.send({success: false, message: 'Error: word not found in list'});}
         	//delete
-        	thread.messages.forEach(wd => {
+        	list.words.forEach(wd => {
         		if (wd.word == word) {wd.isDelete = true;}
         	});
 			//word is deleted, save
@@ -124,7 +126,7 @@ module.exports = (app) => {
 			if (err) {return res.send({success: false, message: 'Error: taboo word list not found'});}
 			if (!list.words) {return res.send({success: false, message: 'Error: missing word list in taboo words'});}
         	var hasWord = list.words.reduce(function(res, el) {
-            		return res || (el.word == word);
+            		return res || ((el.word == word) && !el.isDelete);
             }, false);
         	return res.send({
                 success: true,
@@ -133,4 +135,122 @@ module.exports = (app) => {
             });
 		});
 	});
+
+
+
+	app.get('/test', (req,res,next) => {
+		console.log('?');
+
+		request.get(
+		    'http://localhost:8080/api/taboo/get',
+		    { json: { 
+		    		} 
+		    },
+		    function (error, response, body) {
+		        console.log("1");
+		        console.log(body);
+		        console.log("1");
+		    }
+		);
+
+		setTimeout( function() {
+			request.post(
+			    'http://localhost:8080/api/taboo/create',
+			    { json: { word: "coke"
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("2");
+			        console.log(body);
+			        console.log("2");
+			    }
+			);
+		}, 3000);
+
+		setTimeout( function() {
+			request.post(
+			    'http://localhost:8080/api/taboo/create',
+			    { json: { word: "osu"
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("3");
+			        console.log(body);
+			        console.log("3");
+			    }
+			);
+		}, 6000);
+
+		setTimeout( function() {
+			request.get(
+			    'http://localhost:8080/api/taboo/get',
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("4");
+			        console.log(body);
+			        console.log("4");
+			    }
+			);
+		}, 9000);
+
+		setTimeout( function() {
+			request.get(
+			    'http://localhost:8080/api/taboo/check/osu',
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("5");
+			        console.log(body);
+			        console.log("5");
+			    }
+			);
+		}, 12000);
+
+		setTimeout( function() {
+			request.post(
+			    'http://localhost:8080/api/taboo/deleteword/osu',
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("6");
+			        console.log(body);
+			        console.log("6");
+			    }
+			);
+		}, 15000);
+
+		setTimeout( function() {
+			request.get(
+			    'http://localhost:8080/api/taboo/check/osu',
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("7");
+			        console.log(body);
+			        console.log("7");
+			    }
+			);
+		}, 18000);
+
+		setTimeout( function() {
+			request.get(
+			    'http://localhost:8080/api/taboo/get',
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("4");
+			        console.log(body);
+			        console.log("4");
+			    }
+			);
+		}, 21000);
+	});
+
+
 }

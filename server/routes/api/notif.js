@@ -1,4 +1,5 @@
 const Notification = require('../../models/Notification');
+const User = require('../../models/User');
 
 module.exports = (app) => {
 	//create notif
@@ -108,8 +109,8 @@ module.exports = (app) => {
 	});
 
 	//delete a notif by id
-	app.post('/api/notif/delete/:id', (req,res,next) => {
-		const id = req.params.id;
+	app.post('/api/notif/delete/:notifid', (req,res,next) => {
+		const id = req.params.notifid;
 		Notification.findOne({
 				_id: notifid
 			},
