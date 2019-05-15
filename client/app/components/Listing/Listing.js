@@ -15,7 +15,8 @@ class Listing extends React.Component {
 
         this.state = ({
             listing: {},
-            bids: []
+            bids: [],
+            bid: ''
         })
     }
 
@@ -35,6 +36,29 @@ class Listing extends React.Component {
                         listing: res.data.data.listing,
                         bids: res.data.data.bids
                     })
+                    break;
+            }
+        })
+    }
+
+    change = e => {
+        this.setState({bid: e.target.value}, () => {
+            console.log(this.state.bid);
+        });
+    }
+
+    submit = e => {
+        e.preventDefault();
+        axios.post(`/api/listing/bid/${this.state.listing._id}`, {
+            buyer: this.props.userID,
+            price: this.state.bid
+        }).then( res => {
+            switch(res.data.success) {
+                case true:
+                    console.log(true);
+                    break;
+                case false:
+                    console.log(false); 
                     break;
             }
         })
@@ -80,7 +104,7 @@ class Listing extends React.Component {
                         <Row><Countdown renderer={renderer} date={endtime}>
                             </Countdown></Row>
                         <Row className="mt-3">
-                            <BidAmount listing={listing}></BidAmount>
+                            <BidAmount change={this.change} submit={this.submit} listing={listing}></BidAmount>
                         </Row>
                     </Col>
                 </Row>
