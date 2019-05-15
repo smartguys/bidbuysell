@@ -86,7 +86,7 @@ class RouterHandler extends Component {
         <Route path="/search" component={SearchResults}/>
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
-        <Route path="/myaccount" component={MyAccount}/>
+        <Route path="/myaccount" render={(props) => <MyAccount {...props} userID={userID}/>}/>
         <Route path="/test" component={Test}/>
         <Route path="/admin" component={Admin}/>
         <Route component={NotFound}/>
