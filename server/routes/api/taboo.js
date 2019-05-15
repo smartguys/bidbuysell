@@ -244,9 +244,9 @@ module.exports = (app) => {
 			    		} 
 			    },
 			    function (error, response, body) {
-			        console.log("4");
+			        console.log("8");
 			        console.log(body);
-			        console.log("4");
+			        console.log("8");
 			    }
 			);
 		}, 21000);

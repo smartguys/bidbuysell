@@ -1,6 +1,8 @@
 const Notification = require('../../models/Notification');
 const User = require('../../models/User');
 
+const request = require('request');
+
 module.exports = (app) => {
 	//create notif
 	app.post('/api/notif/create', (req,res,next) => {
@@ -82,7 +84,7 @@ module.exports = (app) => {
 		const userid = req.params.userid;
 		Notification.find().exec( (err, notifs) => {
 			if (err) {return res.send({success: false, message: 'Error: no notifications'});}
-			notifs = notifs.filter(notif => notif.user._id == userid);
+			notifs = notifs.filter(notif => notif.notifiedUser._id == userid);
 			return res.send({
 				success: true,
 				message: "success",
@@ -110,7 +112,7 @@ module.exports = (app) => {
 
 	//delete a notif by id
 	app.post('/api/notif/delete/:notifid', (req,res,next) => {
-		const id = req.params.notifid;
+		const notifid = req.params.notifid;
 		Notification.findOne({
 				_id: notifid
 			},
@@ -131,4 +133,101 @@ module.exports = (app) => {
 			}
 		);
 	});
+
+
+
+
+	app.get('/test', (req,res,next) => {
+		console.log('?');
+		u = new User();
+		var ui = u._id;
+		var n1i, n2i;
+
+		request.post(
+		    'http://localhost:8080/api/notif/create',
+		    { json: { notifiedUser : u,
+		    		  content : "first notif"
+		    		} 
+		    },
+		    function (error, response, body) {
+		        console.log("1");
+		        console.log(body);
+		        console.log("1");
+		        n1i = body.data._id;
+		    }
+		);
+
+		setTimeout( function() {
+			request.post(
+			    'http://localhost:8080/api/notif/create',
+			    { json: { notifiedUser : u,
+			    		  content : "second notif"
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("2");
+			        console.log(body);
+			        console.log("2");
+			        n2i = body.data._id;
+			    }
+			);
+		}, 3000);
+
+		setTimeout( function() {
+			request.post(
+			    'http://localhost:8080/api/notif/update/'+n1i,
+			    { json: { content: "HEY I OVERWROTE IT"
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("3");
+			        console.log(body);
+			        console.log("3");
+			    }
+			);
+		}, 6000);
+
+		setTimeout( function() {
+			request.get(
+			    'http://localhost:8080/api/notif/finduser/'+ui,
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("4");
+			        console.log(body);
+			        console.log("4");
+			    }
+			);
+		}, 9000);
+
+		setTimeout( function() {
+			request.post(
+			    'http://localhost:8080/api/notif/delete/'+n2i,
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("5");
+			        console.log(body);
+			        console.log("5");
+			    }
+			);
+		}, 12000);
+
+		setTimeout( function() {
+			request.get(
+			    'http://localhost:8080/api/notif/findnotif/'+n2i,
+			    { json: { 
+			    		} 
+			    },
+			    function (error, response, body) {
+			        console.log("6");
+			        console.log(body);
+			        console.log("6");
+			    }
+			);
+		}, 15000);
+	});
+
 }
