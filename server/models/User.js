@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const statesArray = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
+const statusArray = ["firstTime", "active", "suspended", "appealing", "disabled"];
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -45,7 +46,8 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
       type: String,
-      default: 'active'
+      enum: statusArray,
+      default: 'firstTime'
   },
   isVip: {
     type: Boolean,
@@ -56,8 +58,20 @@ const UserSchema = new mongoose.Schema({
     default: false
   },
   isDelete: {
-      type: Boolean,
-      default: false
+    type: Boolean,
+    default: false
+  },
+  complaintCount: {
+    type: Number,
+    default: 0
+  },
+  totalMoneySpent: {
+    type: Number,
+    default:  0
+  },
+  rating: {
+    type: Number,
+    default: 5
   }
 });
 

@@ -25,27 +25,39 @@ module.exports = (app) => {
                 const listing = listings[0];
                 if(!listing) {return res.send({success: false, message: 'Error: no listing'});};
                 if(listing.status == 'closed') {return res.send({success: false, message: 'Error: listing already closed'});};
-                newTransaction = new Transaction()
-                newTransaction.listing = bid.listing;
-                newTransaction.seller = listing.seller;
-                newTransaction.buyer = bid.buyer;
-                newTransaction.price = bid.price;
-                newTransaction.timestamp = Date.now();
-                newTransaction.bid = bid;
-                newTransaction.note = body.note;
-                newTransaction.save((err, transaction) => {
-                    if (err) { return res.send({success: false, message: 'Error: server error'});};
-                    listing.status = 'closed'
-                    listing.save((err, listing) => {
-                        console.log(listing)
+                if(!listing.auction) {
+                    Bid.find({
+                        listing: listing._id,
+                    }).sort({
+                        timestamp: 1
+                    }).exec((err, bids) => {
                         if (err) { return res.send({success: false, message: 'Error: server error'});};
-                        return res.send({
-                            success: true,
-                            message: 'success',
-                            data: {listing, transaction}
+                        firstBid = bids[0]
+                        if(String(firstBid._id) != String(bid._id)) {
+                            if(!body.note){ return res.send({success: false, message: 'Error: note required if bid is not first for fixed-price listing'});}
+                        };
+                        newTransaction = new Transaction()
+                        newTransaction.listing = bid.listing;
+                        newTransaction.seller = listing.seller;
+                        newTransaction.buyer = bid.buyer;
+                        newTransaction.price = bid.price;
+                        newTransaction.timestamp = Date.now();
+                        newTransaction.bid = bid;
+                        newTransaction.note = body.note;
+                        newTransaction.save((err, transaction) => {
+                            if (err) { return res.send({success: false, message: 'Error: server error'});};
+                            listing.status = 'closed'
+                            listing.save((err, listing) => {
+                                if (err) { return res.send({success: false, message: 'Error: server error'});};
+                                return res.send({
+                                    success: true,
+                                    message: 'success',
+                                    data: {listing, transaction}
+                                });
+                            });
                         });
-                    });
-                });
+                    })
+                };
             });
         });
     });

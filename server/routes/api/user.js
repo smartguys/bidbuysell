@@ -169,8 +169,24 @@ app.post('/api/account/signin', (req, res, next) => {
     })
 
 });
+  
+  //get user from userid
+  app.get('/api/account/get/username/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user
+      });
+    });
+  });
 
-  app.get('/api/account/username/:userid', (req, res, next) => {
+  //get username from userid
+  app.get('/api/account/get/username/:userid', (req, res, next) => {
     const userid = req.params.userid;
     User.findOne({
       _id: userid
@@ -180,6 +196,142 @@ app.post('/api/account/signin', (req, res, next) => {
         success: true,
         message: "success",
         data: user.userName
+      });
+    });
+  });
+
+  //increment complaint count against user
+  app.post('/api/account/set/complaintcount/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      user.complaintCount++;
+      //two complaints = 1 warning, vips must have 0 warnings
+      if (user.isVip && user.complaintCount >= 2) {
+        user.isVip = false;
+      }
+      user.save((err, user) => {
+        if (err) {
+          return res.send({success: false, message: 'Error: server error'});
+        }
+        return res.send({
+          success: true,
+          message: "Added a justified complaint to the user.",
+          data: user.complaintCount
+        });
+      });
+    });
+  });
+
+  //get complaintcount from userid
+  app.get('/api/account/get/complaintcount/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user
+      });
+    });
+  });
+
+  //modify user rating
+  app.post('/api/account/set/rating/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    const {body} = req;
+    //check that rating is sent
+    if (!body['rating']) {return res.send({success: false, message: 'Error: no rating'});}
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      user.rating = body['rating'];
+      //possible change of vip status
+      if (user.isVip && user.rating < 4) {
+        user.isVip = false;
+      }
+      if (!user.isVip && user.rating >= 4 && user.totalMoneySpent >= 500 && user.complaintcount <= 1) {
+        user.isVip = true;
+      }
+      user.save((err, user) => {
+        if (err) {
+          return res.send({success: false, message: 'Error: server error'});
+        }
+        return res.send({
+          success: true,
+          message: "Changed the user's rating.",
+          data: user
+        });
+      });
+    });
+  });
+
+  //get rating from userid
+  app.get('/api/account/get/rating/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user.rating
+      });
+    });
+  });
+
+  //get status from userid
+  app.get('/api/account/get/status/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user.status
+      });
+    });
+  });
+
+  //modify user rating
+  app.post('/api/account/set/status/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    const {body} = req;
+    //check that status is sent
+    if (!body['status']) {return res.send({success: false, message: 'Error: no status'});}
+    const status = body['status'];
+    //check that status is valid
+    const statusArray = ["firstTime", "active", "suspended", "appealing", "disabled"];
+    var isValid = false;
+    for (var i=0; i<statusArray.length; i++) {
+      if (statusArray[i] == status) {
+        isValid = true;
+        break;
+      }
+    }
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      //set and save
+      user.status = status;
+      user.save((err, user) => {
+        if (err) {
+          return res.send({success: false, message: 'Error: server error'});
+        }
+        return res.send({
+          success: true,
+          message: "Changed the user's rating.",
+          data: user
+        });
       });
     });
   });

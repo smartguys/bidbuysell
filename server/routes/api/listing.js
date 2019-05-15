@@ -5,6 +5,7 @@ let jwtProcess = require('../../jwt');
 const User = require('../../models/User')
 const Bid = require('../../models/Bid')
 const Transaction = require('../../models/Transaction')
+const Friendship = require('../../models/Friendship')
 
 module.exports = (app) => {
     // create listing
@@ -234,12 +235,47 @@ module.exports = (app) => {
                 if (!users[0]) { return res.send({ success: false, message: 'Error: no user' }); };
                 //we are good to update
                 listing.winner = userid;
+                //keep track of spending for the winning user
+                var user = users[0];
+                //check if friend discount applies
+                var u1 = userid;
+                var u2 = listing.seller;
+                if (u1 > u2) {
+                    var tmp = u2;
+                    u1 = u2;
+                    u2 = tmp;
+                }
+                var friends = true;
+                Friendship.find({
+                    user1: u1,
+                    user2: u2,
+                    isDelete: false
+                }, (err, friendships) => {
+                    if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                    if (!friendships[0]) {friends = false};
+                });
+                //add possible vip discount
+                var disc = (user.isVip ? 0.95 : 1);
+                //add total cost to career money spent
+                if (friends) {
+                    user.totalMoneySpent += disc*listing.price*(1-listing.friendDiscount/100);
+                }
+                else {
+                    user.totalMoneySpent += disc*listing.price;
+                }
+                //check if buying user becomes a vip after this
+                if (!user.isVip && user.totalMoneySpent >= 500 && user.complaintcount <= 1) {
+                    user.isVip = true;
+                }
                 listing.save( (err, listing) => {
                     if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                    return res.send({
-                        success: true,
-                        message: 'listing winner updated',
-                        data: {listing}
+                    user.save( (err, user) => {
+                        if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                        return res.send({
+                            success: true,
+                            message: 'listing winner updated',
+                            data: {listing}
+                        });
                     });
                 });
             });
