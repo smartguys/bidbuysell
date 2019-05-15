@@ -141,7 +141,7 @@ class Listing extends React.Component {
                         </Row>
 
                         <Row style={{ display: (winner === '') ? 'block' : 'none' }}>
-                            <BidTable setWinner={this.setWinner} bids={bids}/>
+                            <BidTable setWinner={this.setWinner} bids={bids}/>~
                         </Row>
                     </Col>
                 </Row>

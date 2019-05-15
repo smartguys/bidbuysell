@@ -21,27 +21,6 @@ class UserManagement extends Component {
         this.props.getUsers()
     }
 
-    // updateApplication = () => {
-    //     axios.put(`/api/account/apply/${this.state.id}/${this.state.decision}`)
-    //     .then( res => {
-    //         switch(res.data.success) {
-    //             case true:
-    //                 this.setState({
-    //                     id: '',
-    //                     decision: '',
-    //                     applicationApproved: res.data.data
-    //                 }, this.props.getApplications());
-    //                 if ((this.state.applicationApproved.status) == 'approved') {
-    //                     this.createUserFromApplication()
-    //                 }
-    //                 break;
-    //             case false:
-    //                console.log(res.data.message);
-    //                break; 
-    //         }
-    //     })
-    // }
-
     click = e => {
         console.log(e.target.name,e.target.value)
         e.preventDefault();
