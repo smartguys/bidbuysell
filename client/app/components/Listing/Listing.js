@@ -7,6 +7,7 @@ import SellerInfo from './SellerInfo';
 import SearchBar from '../Search/Search'
 import axios from 'axios'
 import Countdown from 'react-countdown-now';
+import BidTable from './BidTable'
 
 class Listing extends React.Component {
     constructor(props) {
@@ -16,13 +17,38 @@ class Listing extends React.Component {
         this.state = ({
             listing: {},
             bids: [],
-            bid: ''
+            bid: '',
+            winner: ''
         })
     }
 
     componentDidMount() {
         this.getListing()
     }
+
+    setWinner = (winner) => {
+        this.setState({
+            winner: winner
+        }, () => {
+            console.log("winner:",this.state.winner)
+
+            this.createTransaction();
+        })
+    }
+
+    createTransaction = () => {
+            axios.post(`/api/transaction/submit/${this.state.winner._id}`).then(res => {
+              switch (res.data.success) {
+                case false:
+                  console.log(res.data.message)
+                  break;
+                case true:
+                  console.log(res.data.message)
+                  break;
+              }
+            })
+    }
+
 
     getListing = () => {
         let id = this.props.match.params.id
@@ -70,6 +96,10 @@ class Listing extends React.Component {
             listing,
             bids
         } = this.state;
+        let {
+            winner
+        } = this.state
+
         let endtime = new Date(listing.endtime)
 
         const renderer = ({ days, hours, minutes, seconds, completed }) => {
@@ -98,14 +128,20 @@ class Listing extends React.Component {
                         <Row>
                             <SellerInfo seller={listing.seller}></SellerInfo>
                         </Row>
-
-                        <Row className="mt-3">
+                        <Container>
+                        <Row className="mt-3" style={{ display: (winner === '') ? 'block' : 'none' }}>
                             <h5>Time Remaining</h5>
                         </Row>
-                        <Row><Countdown renderer={renderer} date={endtime}>
+                            <Row style={{ display: (winner === '') ? 'block' : 'none' }}>
+                        <Countdown renderer={renderer} date={endtime}>
                             </Countdown></Row>
-                        <Row className="mt-3">
+                            </Container>
+                        <Row className="mt-3" style={{ display: (winner === '') ? 'block' : 'none' }}>
                             <BidAmount change={this.change} submit={this.submit} listing={listing} bids={bids}></BidAmount>
+                        </Row>
+
+                        <Row style={{ display: (winner === '') ? 'block' : 'none' }}>
+                            <BidTable setWinner={this.setWinner} bids={bids}/>
                         </Row>
                     </Col>
                 </Row>

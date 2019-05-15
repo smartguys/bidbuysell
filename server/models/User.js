@@ -45,7 +45,7 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
       type: String,
-      default: 'Under Review'
+      default: 'active'
   },
   isVip: {
     type: Boolean,

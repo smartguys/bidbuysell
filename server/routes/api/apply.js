@@ -90,6 +90,20 @@ module.exports = (app) => {
         })
     }); 
 
+    /*
+    * Get all applications
+    */
+    app.get('/api/account/apply', (req,res,next) => {
+        Application.find({}, (err, applications) => {
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+            return res.send({
+                success: true,
+                message: 'all apps',
+                data: { applications }
+            })
+        });
+    })
+
    /*
     * Change application status
     */
@@ -100,7 +114,13 @@ module.exports = (app) => {
         application.status = req.params.decision
 
         application.save()
-          .then(() => res.json(application))
+          .then(() => {
+            return res.send({
+                success: true,
+                message: 'success',
+                data: application
+            })
+          })
           .catch((err) => next(err));
       })
       .catch((err) => next(err));
