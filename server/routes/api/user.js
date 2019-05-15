@@ -220,11 +220,55 @@ app.post('/api/account/signin', (req, res, next) => {
       return res.send({
         success: true,
         message: "success",
-        data: user.complaintcount
+        data: user
       });
     });
   });
 
+  //modify user rating
+  app.post('/api/account/setrating/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    const {body} = req;
+    //check that rating is sent
+    if (!body['rating']) {return res.send({success: false, message: 'Error: no rating'});}
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      user.rating = body['rating'];
+      //possible change of vip status
+      if (user.isVip && user.rating < 4) {
+        user.isVip = false;
+      }
+      if (!user.isVip && user.rating >= 4 && user.totalMoneySpent >= 500 && user.complaintcount <= 1) {
+        user.isVip = true;
+      }
+      user.save((err, user) => {
+        if (err) {
+          return res.send({success: false, message: 'Error: server error'});
+        }
+        return res.send({
+          success: true,
+          message: "Changed the user's rating.",
+          data: user;
+        });
+      });
+    });
+  });
 
+  //get rating from userid
+  app.get('/api/account/rating/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user.rating
+      });
+    });
+  });
 
 }

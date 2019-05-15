@@ -65,7 +65,11 @@ const UserSchema = new mongoose.Schema({
   },
   totalMoneySpent: {
     type: Number,
-    default: 0
+    default:  0
+  },
+  rating: {
+    type: Number,
+    default: 5
   }
 });
 
