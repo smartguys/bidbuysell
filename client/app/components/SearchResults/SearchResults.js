@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, InputGroup, FormControl, Form } from 'react-bootstrap';
+import { Container, Row, Col, InputGroup, FormControl, Form, Button } from 'react-bootstrap';
 import Product from '../Listing/Product'
 //import ProductImage from './ProductImage';
 import CurrentPrice from '../Listing/CurrentPrice';
@@ -78,7 +78,8 @@ class SearchResults extends Component {
                             return (
                                 <Row  key={listing._id} className="mt-5">
                         <IndividualListing listing={listing}></IndividualListing>
-                        <Link to={`/listing/${listing._id}`}>View Listing</Link>
+                        <Link to={`/listing/${listing._id}`}>
+                        <Button className="mt-3 ml-5" variant="primary" type="button">View Listing</Button></Link>
                         </Row>
                             )
                         

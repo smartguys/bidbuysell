@@ -1,53 +1,58 @@
 import React, { Component } from 'react';
 import { CardGroup, Card, Button } from 'react-bootstrap'
+import axios from 'axios'
 
 class Recommendation extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            listings: []
+        }
+    }
+
+    componentDidMount() {
+        this.getListings()
+    }
+
+    getListings = () => {
+        console.log("getting listings")
+        axios.get('/api/listing/search').then(res => {
+            switch (res.data.success) {
+                case true:
+                    this.setState({
+                        listings: res.data.data.listings
+                    }, () => console.log(this.state.listings.slice(0, 3)))
+                    break;
+                case false:
+                    console.log(res.data.message);
+                    break;
+            }
+        })
+    }
+
     render() {
         return (
-            <div style={ { marginTop: '50px', paddingBottom: '50px'}}>
-            <h5>Recommmended for You:</h5>
-            <CardGroup>
-                <Card>
-                    <Card.Img variant="top" src="http://via.placeholder.com/640x360" />
-                    <Card.Body>
-                        <Card.Title>Card title</Card.Title>
-                        <Card.Text>
-                            This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.
-                </Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                    <Card.Link href="#">Viewing Listing</Card.Link>
-                    </Card.Footer>
-                </Card>
-                <Card>
-                    <Card.Img variant="top" src="http://via.placeholder.com/640x360" />
-                    <Card.Body>
-                        <Card.Title>Card title</Card.Title>
-                        <Card.Text>
-                            This card has supporting text below as a natural lead-in to additional
-                  content.{' '}
-                        </Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                    <Card.Link href="#">Viewing Listing</Card.Link>
-                    </Card.Footer>
-                </Card>
-                <Card>
-                    <Card.Img variant="top" src="http://via.placeholder.com/640x360" />
-                    <Card.Body>
-                        <Card.Title>Card title</Card.Title>
-                        <Card.Text>
-                            This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This card has even longer content than the first to
-                            show that equal height action.
-                </Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                    <Card.Link href="#">Viewing Listing</Card.Link>
-                    </Card.Footer>
-                </Card>
-            </CardGroup>
+            <div style={{ marginTop: '50px', paddingBottom: '50px', width: '100%' }}>
+                <h5>Recommmended for You:</h5>
+                <CardGroup>
+                    {this.state.listings.slice(0,3).map(listing => {
+                        return (
+                            <Card key={listing._id}>
+                                <Card.Img variant="top" src={listing.image} />
+                                <Card.Body>
+                                    <Card.Title>{listing.name}</Card.Title>
+                                    <Card.Text>
+                                    {listing.description}
+                                     </Card.Text>
+                                </Card.Body>
+                                <Card.Footer>
+                                    <Card.Link href={`/listing/${listing._id}`} >Viewing Listing</Card.Link>
+                                </Card.Footer>
+                            </Card>
+                        )
+                    })}
+                </CardGroup>
             </div>
         )
     }

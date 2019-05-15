@@ -21,7 +21,7 @@ class CurrentPrice extends React.Component {
                 <h5>Current Price: ${price}</h5>
             </Row>
             <Row>
-            <Button type="submit" variant="secondary">{(auction)? 'Bid Now' : 'Buy Now'}</Button>
+                <h6>{(auction)? 'Auction' : 'Fixed Price'}</h6>
             </Row>
 
              </Container>

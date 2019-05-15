@@ -14,9 +14,13 @@ class Confirmation extends Component {
         return (
             <Container>
                 <Row className='mt-5 justify-content-center'>
-                    <h4>Thanks {firstName}! Your application has been submitted.</h4>
-                    <p>We will review your application and get back to your shortly</p>
+                    <h4>Thanks, submission successful!</h4>
                 </Row>
+                <Row className='mt-5 justify-content-center'>
+                    <h5>We will review and get back to you shortly</h5>
+                </Row>
+                
+
             </Container>
         )
     }

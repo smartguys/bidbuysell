@@ -27,7 +27,7 @@ class HeaderWithName extends Component {
           </Nav>
           <Nav className="justify-content-end" activeKey="/home">
             <Nav.Item>
-              <Link to='/sell'><Navbar.Brand>Buy</Navbar.Brand></Link>
+              <Link to='/search'><Navbar.Brand>Buy</Navbar.Brand></Link>
             </Nav.Item>
             <Nav.Item>
               <Link to='/sell'><Navbar.Brand>Sell</Navbar.Brand></Link>

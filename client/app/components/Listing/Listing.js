@@ -18,7 +18,8 @@ class Listing extends React.Component {
             listing: {},
             bids: [],
             bid: '',
-            winner: ''
+            winner: '',
+            status: ''
         })
     }
 
@@ -60,7 +61,8 @@ class Listing extends React.Component {
                     console.log(res.data)
                     this.setState({
                         listing: res.data.data.listing,
-                        bids: res.data.data.bids
+                        bids: res.data.data.bids,
+                        status: res.data.data.listing.status
                     })
                     break;
             }
@@ -97,7 +99,8 @@ class Listing extends React.Component {
             bids
         } = this.state;
         let {
-            winner
+            winner,
+            status
         } = this.state
 
         let endtime = new Date(listing.endtime)
@@ -119,15 +122,16 @@ class Listing extends React.Component {
                     <Col></Col>
                 </Row>
                 <Row className="mt-3">
-
                     <Col>
                         <Product listing={listing}></Product>
                     </Col>
 
                     <Col>
+                    <Container style={{ display: (status === 'active') ? 'block' : 'none' }}>
                         <Row>
                             <SellerInfo seller={listing.seller}></SellerInfo>
                         </Row>
+                        <Row>
                         <Container>
                         <Row className="mt-3" style={{ display: (winner === '') ? 'block' : 'none' }}>
                             <h5>Time Remaining</h5>
@@ -136,12 +140,19 @@ class Listing extends React.Component {
                         <Countdown renderer={renderer} date={endtime}>
                             </Countdown></Row>
                             </Container>
+                        </Row>
+                        
                         <Row className="mt-3" style={{ display: (winner === '') ? 'block' : 'none' }}>
                             <BidAmount change={this.change} submit={this.submit} listing={listing} bids={bids}></BidAmount>
                         </Row>
+                        </Container>
 
-                        <Row style={{ display: (winner === '') ? 'block' : 'none' }}>
-                            <BidTable setWinner={this.setWinner} bids={bids}/>~
+                        <Row style={{ display: (status === 'closed' && winner === '' && listing.seller === this.props.userID) ? 'block' : 'none' }}>
+                            <BidTable setWinner={this.setWinner} bids={bids}/>
+                        </Row>
+
+                        <Row style={{ display: (status === 'closed' && listing.seller != this.props.userID || status === 'closed' && winner != '' && listing.seller === this.props.userID) ? 'block' : 'none' }}>
+                            <h4>This listing is no longer active.</h4>
                         </Row>
                     </Col>
                 </Row>

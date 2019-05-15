@@ -68,7 +68,7 @@ class Sell extends Component {
             endtime: this.state.endtime,
             image: this.state.src,
             friendDiscount: this.state.friendDiscount,
-            seller: this.state.seller
+            seller: this.props.userID
         }).then(res => {
             console.log(res.data.success)
             switch (res.data.success) {
@@ -177,11 +177,13 @@ class Sell extends Component {
                             <Form.Group controlId="exampleForm.Categories">
                                 <Form.Label>Categories</Form.Label>
                                 <Form.Control as="select">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    <option>Computers</option>
+                                    <option>Video Games</option>
+                                    <option>Clothing</option>
+                                    <option>Books</option>
+                                    <option>Art</option>
+                                    <option>Furniture</option>
+                                    <option>Bikes</option>
                                 </Form.Control>
                             </Form.Group>
                             <Row>
