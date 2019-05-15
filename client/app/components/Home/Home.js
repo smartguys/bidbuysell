@@ -17,29 +17,27 @@ class Home extends Component {
 
   change = e => {
     this.setState({
-        [e.target.name]: e.target.value
+      [e.target.name]: e.target.value
     })
-}
-
-  submit = e => {
-      e.preventDefault();
-      this.props.history.push({
-          pathname: '/search',
-          query: this.state.query
-        })
   }
 
-
+  submit = e => {
+    e.preventDefault();
+    this.props.history.push({
+      pathname: '/search',
+      query: this.state.query
+    })
+  }
 
   render() {
     let title = {
-      marginLeft: 'auto', 
+      marginLeft: 'auto',
       marginRight: 'auto',
-      fontSize: '72px', 
+      fontSize: '72px',
       color: '#007bff',
       weight: 'Bold'
     }
-    
+
     return (
       <Container>
         <Row>

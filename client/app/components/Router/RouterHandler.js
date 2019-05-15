@@ -77,14 +77,14 @@ class RouterHandler extends Component {
     <App userName={userName} login={this.login} logout={this.logout}>
       <Switch>
         <Route exact path="/" component={Home}/>
-        <Route path="/listing" component={Listing}/>
+        <Route path="/listing/:id" component={Listing}/>
         <Route path="/login" render={(props) => <Login {...props} userName={userName} login={this.login}/>} />
         <Route path="/apply" component={Application}/>
         <Route path="/sell"  render={(props) => <Sell {...props} userID={userID}/>} />
         <Route path="/search" component={SearchResults}/>
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
-        <Route path="/myaccount/:id" component={MyAccount}/>
+        <Route path="/myaccount/" component={MyAccount}/>
         <Route component={NotFound}/>
       </Switch>
     </App>
