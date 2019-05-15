@@ -9,35 +9,12 @@ import Axios from 'axios'
 class HeaderWithName extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      userName: '',
-    };
-  }
-
-  componentDidMount() {
-    const jwt = getJwt();
-    console.log(jwt)
-    if (jwt) {
-      Axios.get('/verify', {
-        headers: {
-          Authorization: `Bearer ${jwt}`
-        }
-      }).then(res => {
-        this.setState({
-          userName: res.data.message.userName
-        });
-      }).catch(err => {
-        localStorage.removeItem('cool-jwt')
-      }
-      )
-    }
   }
 
   render() {
     const {
       userName
-    } = this.state;
+    } = this.props
 
     return (
       <Navbar bg="light" expand="lg">
@@ -55,7 +32,7 @@ class HeaderWithName extends Component {
             <Nav.Item>
               <Link to='/sell'><Navbar.Brand>Sell</Navbar.Brand></Link>
             </Nav.Item>
-            <Link to='/login'>
+            <Link to={(userName === '')? "/login" : "/myaccount"}>
               <Button style={{ marginLeft: '5px' }} variant="primary">{(userName === '')? "Login" : "My Account"}</Button>
             </Link>
           </Nav>

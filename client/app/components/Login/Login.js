@@ -18,6 +18,7 @@ class Login extends Component {
       loginAlertMessage: '',
       loginAlertVariant: ''
     }
+    this.login = props.login
   }
 
   change = e => {
@@ -47,6 +48,7 @@ class Login extends Component {
             loginAlertMessage: res.data.message,
             loginAlertVariant: 'success'
           })
+          this.login()
           this.props.history.push('/myaccount')
           break;
       }

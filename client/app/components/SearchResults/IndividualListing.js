@@ -5,18 +5,53 @@ import Product from '../Listing/Product'
 import CurrentPrice from '../Listing/CurrentPrice';
 import BidAmount from '../Listing/BidAmount';
 import SellerInfo from '../Listing/SellerInfo';
+import axios from 'axios'
 
-class IndivudalListing extends Component {
+class IndividualListing extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            bids: []
+        }
+    }
+    componentDidMount() {
+        this.getListing()
+    }
+
+    getListing = () => {
+        let id = this.props.listing._id
+        axios.get(`/api/listing/id/${id}`).then(res => {
+            switch (res.data.success) {
+                case false:
+                    break;
+                case true:
+                    console.log(res.data)
+                    this.setState({
+                        bids: res.data.data.bids
+                    })
+                    break;
+            }
+        })
+    }
+
     render() {
+        let {
+            listing
+        } = this.props
+        let {
+            bids
+        } = this.state
+
         return (
             <Container>
                 <Row>
                     <Col>
-                        <Product></Product>
+                        <Product listing={listing}></Product>
                     </Col>
                     <Col>
-                        <CurrentPrice></CurrentPrice>
-                        <SellerInfo></SellerInfo>
+                        <CurrentPrice listing={listing} bids={bids}></CurrentPrice>
+                        <SellerInfo seller={listing.seller}></SellerInfo>
                     </Col>
                 </Row>
             </Container>
@@ -24,4 +59,4 @@ class IndivudalListing extends Component {
     }
 }
 
-export default IndivudalListing;
+export default IndividualListing;

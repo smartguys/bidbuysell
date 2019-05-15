@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
     state: {
         type: String,
         uppercase: true,
-        required: true,
+        // required: true,
         enum: statesArray
     },
     zip: Number
@@ -45,7 +45,7 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
       type: String,
-      default: 'Under Review'
+      default: 'active'
   },
   isVip: {
     type: Boolean,

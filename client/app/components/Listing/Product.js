@@ -6,33 +6,29 @@ import { Container, Row, Col, Card, CardGroup } from 'react-bootstrap';
 
 class Product extends React.Component{
     render() {
+        let {
+            name,
+            description,
+            image
+        } = this.props.listing
+
         return (
-            <div style={ { marginTop: '50px', paddingBottom: '50px'}}>
            
             <CardGroup>
                 <Card bg="light">
                    
                     <Card.Body>
-                        <Card.Title>Product Name</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">Product Subtitle</Card.Subtitle>
-
-                        <Card.Img variant="top" src="http://via.placeholder.com/640x360" />
+                        <Card.Title>{name}</Card.Title>
+                        <Card.Img variant="top" src={(image)? image : "http://via.placeholder.com/640x360"} />
                         <Card.Text>
-                            The product description goes here.
+                        {description}
                 </Card.Text>
                     </Card.Body>
                  
                 </Card>
             </CardGroup>
-            </div>
         
 
-
-
-    // {  <div>
-          //  <h3>Product Name</h3>
-           // <h4>Subtitle</h4>          
-           //</div> } 
  
         )
     }
