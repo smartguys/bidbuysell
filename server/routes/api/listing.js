@@ -4,6 +4,7 @@ let jwt = require('jsonwebtoken');
 let jwtProcess = require('../../jwt');
 const User = require('../../models/User')
 const Bid = require('../../models/Bid')
+const Transaction = require('../../models/Transaction')
 
 module.exports = (app) => {
     // create listing
@@ -188,45 +189,71 @@ module.exports = (app) => {
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if(!listing) {return res.send({success: false, message: 'Error: no active listing'});};
-            
+            if(!listing.auction) {return res.send({success: false, message: 'Error: cannot bid on fixed-price listing'});};
             User.find({ // check if buyer exists
                 _id: body['buyer']
             }, (err, users) => {
                 if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                 if (!users[0]) { return res.send({ success: false, message: 'Error: no user' }); };
-
-
-                if(listing.auction) { // check if auction
-                    if(!body.price) { // check for price parameter
-                        return res.send({success: false, message: 'Error: missing price on auction listing'});
-                    } else {
-                        newBid.price = body.price;
-                        listing.price = Math.max(listing.price, body.price);
-                        newBid.save((err, bid) => { // save newBid
-                            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                            listing.save((err, listing) => { //update listing
-                                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                                return res.send({
-                                    success: true,
-                                    message: "auction listing updated with new bid",
-                                    data: {listing, bid}
-                                });
-                            })
-                        })
-                    }
+                if(!body.price) { // check for price parameter
+                    return res.send({success: false, message: 'Error: missing price on auction listing'});
                 } else {
-                    newBid.price = listing.price; // save new bid with current listing price
-                    newBid.save((err, bid) => {
+                    newBid.price = body.price;
+                    listing.price = Math.max(listing.price, body.price);
+                    newBid.save((err, bid) => { // save newBid
                         if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                        console.log(bid)
-                        return res.send({
-                            success: true,
-                            message: "bid created for fixed-price listing",
-                            data: {bid}
+                        listing.save((err, listing) => { //update listing
+                            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                            return res.send({
+                                success: true,
+                                message: "auction listing updated with new bid",
+                                data: {listing, bid}
+                            });
                         });
-                    })
-                }
+                    });
+                };
             })
         });
+    })
+    // submit purchasea fixed-price listing and create transaction.
+    app.post('/api/listing/buy/:id', (req, res, next) => {
+        const id = req.params.id;
+        const { body } = req;
+        Listing.find({ // check if listing exists
+            $and: [
+                {_id: id },
+                {status: 'active'},
+                {auction: false}
+            ]
+        }, (err, listings) => {
+            console.log(listings)
+            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+            const listing = listings[0]
+            if(!listing) {return res.send({success: false, message: 'Error: no active fixed-price listing'});};
+            User.find({ // check if buyer exists
+                _id: body['buyer']
+            }, (err, buyers) => {
+                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                const buyer = buyers[0];
+                if (!buyer) { return res.send({ success: false, message: 'Error: no buyer user' }); };
+                const newTransaction = new Transaction()
+                newTransaction.listing = listing;
+                newTransaction.seller = listing.seller;
+                newTransaction.buyer = buyer;
+                newTransaction.price = listing.price
+                newTransaction.save((err, transaction) => {
+                    if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                    listing.status = 'closed'
+                    listing.save((err, listing) => {
+                        if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                        return res.send({
+                            success: true,
+                            message: "transaction created for fixed-price listing",
+                            data: {listing, transaction}
+                        });
+                    });
+                })
+            })
+        })
     })
 }

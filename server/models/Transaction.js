@@ -2,15 +2,18 @@ const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
     listing: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+		ref: 'Listing',
         required: true
     },
     seller: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
         required: true
     },
     buyer: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
         required: true
     },
     price: {
@@ -19,7 +22,8 @@ const TransactionSchema = new mongoose.Schema({
     },
     timestamp: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now
     },
     bid : {
 		type: mongoose.Schema.Types.ObjectId,
