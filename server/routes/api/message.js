@@ -45,7 +45,6 @@ module.exports = (app) => {
         	if (err) {
         		return res.send({success: false, message: 'Error: server error'});
         	}
-        	console.log(thread);
         	return res.send({
                 success: true,
                 message: "Message thread created.",
@@ -149,6 +148,28 @@ module.exports = (app) => {
 	            });
 			}
 		);
+	});
+
+	//get all threads with user
+	app.get('/api/message/getthreads/:userid', (req,res,next) => {
+		const userid = req.params.userid;
+		MessageThread.find().exec( (err, threads) => {
+			if (err) {return res.send({success: false, message: 'Error: no message threads'});}
+			threads = threads.filter(thread => {
+				var hasUser = false;
+				thread.users.forEach(user => {
+					if (user._id == userid) {
+						hasUser = true;
+					}
+				});
+				return hasUser;
+			});
+			return res.send({
+				success: true,
+				message: "Found threads with user.",
+				data: threads
+			});
+		});
 	});
 
 
@@ -280,7 +301,7 @@ module.exports = (app) => {
 			(err, thread) => {
 				if (err) {return res.send({success: false, message: 'Error: no message thread'});}
             	if (!thread.messages) {return res.send({success: false, message: 'Error: missing messages in message thread'});}
-	        	var msgs = thread.messages.filter(msg => msg.sender._id==userid);
+	        	var msgs = thread.messages.filter(msg => msg.sender._id == userid);
 	        	return res.send({
 	                success: true,
 	                message: "success",
