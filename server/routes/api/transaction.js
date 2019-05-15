@@ -55,7 +55,6 @@ module.exports = (app) => {
     app.get('/api/transaction/all', (req,res,next) => {
         const term = req.params.term
         Transaction.find({}, (err, transactions) => {
-            console.log(transactions)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             return res.send({
                 success: true,
@@ -70,7 +69,6 @@ module.exports = (app) => {
         Transaction.find({
             _id: id
         }, (err, transactions) => {
-            console.log(transactions)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             const transaction = transactions[0]
             if(!transaction) {return res.send({success: false, message: 'Error: no transaction'});};
@@ -90,7 +88,6 @@ module.exports = (app) => {
                 {seller: id}
             ]
         }, (err, transactions) => {
-            console.log(transactions)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             return res.send({
                 success: true,

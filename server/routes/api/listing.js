@@ -43,7 +43,6 @@ module.exports = (app) => {
             if (err) { return res.send({ success: false, message: 'Error: no user' }); };
             newListing.save((err, listing) => {
                 if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                console.log(listing)
                 return res.send({
                     success: true,
                     message: "Listing created.",
@@ -77,9 +76,6 @@ module.exports = (app) => {
                 { $set: { status: status } },
                 { returnOriginal: false },
                 (err, listing) => {
-                    console.log(status)
-                    console.log(err)
-                    console.log(listing.status)
                     // the returnOriginal option doesnt see to work, 
                     // where I want to return the modified object, so just respond 'success', for now.
                     return res.send({
@@ -93,7 +89,6 @@ module.exports = (app) => {
     // show all listings, regardless of status
     app.get('/api/listing/all', (req,res,next) => {
         Listing.find({}, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
@@ -108,7 +103,6 @@ module.exports = (app) => {
         Listing.find({
             _id: id
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if (!listing) { return res.send({ success: false, message: 'Error: no listing' }); };
@@ -130,7 +124,6 @@ module.exports = (app) => {
         Listing.find({
             seller: id
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             return res.send({
                 success: true,
@@ -144,7 +137,6 @@ module.exports = (app) => {
         Listing.find({
             status: 'active'
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
@@ -162,7 +154,6 @@ module.exports = (app) => {
                 { $text: { $search: term } }
             ]
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
@@ -185,75 +176,45 @@ module.exports = (app) => {
                 { status: 'active' }
             ]
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if(!listing) {return res.send({success: false, message: 'Error: no active listing'});};
-            if(!listing.auction) {return res.send({success: false, message: 'Error: cannot bid on fixed-price listing'});};
             User.find({ // check if buyer exists
                 _id: body['buyer']
             }, (err, users) => {
                 if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                 if (!users[0]) { return res.send({ success: false, message: 'Error: no user' }); };
-                if(!body.price) { // check for price parameter
-                    return res.send({success: false, message: 'Error: missing price on auction listing'});
-                } else {
-                    newBid.price = body.price;
-                    listing.price = Math.max(listing.price, body.price);
-                    newBid.save((err, bid) => { // save newBid
-                        if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                        listing.save((err, listing) => { //update listing
+                if(listing.auction) { // check if auction
+                    if(!body.price) { // check for price parameter
+                        return res.send({success: false, message: 'Error: missing price on auction listing'});
+                    } else {
+                        newBid.price = body.price;
+                        listing.price = Math.max(listing.price, body.price);
+                        newBid.save((err, bid) => { // save newBid
                             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                            return res.send({
-                                success: true,
-                                message: "auction listing updated with new bid",
-                                data: {listing, bid}
-                            });
-                        });
-                    });
-                };
-            })
-        });
-    })
-    // submit purchasea fixed-price listing and create transaction.
-    app.post('/api/listing/buy/:id', (req, res, next) => {
-        const id = req.params.id;
-        const { body } = req;
-        Listing.find({ // check if listing exists
-            $and: [
-                {_id: id },
-                {status: 'active'},
-                {auction: false}
-            ]
-        }, (err, listings) => {
-            console.log(listings)
-            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-            const listing = listings[0]
-            if(!listing) {return res.send({success: false, message: 'Error: no active fixed-price listing'});};
-            User.find({ // check if buyer exists
-                _id: body['buyer']
-            }, (err, buyers) => {
-                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                const buyer = buyers[0];
-                if (!buyer) { return res.send({ success: false, message: 'Error: no buyer user' }); };
-                const newTransaction = new Transaction()
-                newTransaction.listing = listing;
-                newTransaction.seller = listing.seller;
-                newTransaction.buyer = buyer;
-                newTransaction.price = listing.price
-                newTransaction.save((err, transaction) => {
-                    if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                    listing.status = 'closed'
-                    listing.save((err, listing) => {
+                            listing.save((err, listing) => { //update listing
+                                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                                return res.send({
+                                    success: true,
+                                    message: "auction listing updated with new bid",
+                                    data: {listing, bid}
+                                });
+                            })
+                        })
+                    }
+                } else {
+                    if(body.price) { return res.send({ success: false, message: 'Error: cannot submit price for fixed-price listing' }); };
+                    newBid.price = listing.price; // save new bid with current listing price
+                    newBid.save((err, bid) => {
                         if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                         return res.send({
                             success: true,
-                            message: "transaction created for fixed-price listing",
-                            data: {listing, transaction}
+                            message: "bid created for fixed-price listing",
+                            data: {listing, bid}
                         });
                     });
-                })
-            })
-        })
-    })
+                };
+            });
+        });
+    });
 }

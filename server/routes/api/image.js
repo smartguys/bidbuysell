@@ -18,7 +18,6 @@ module.exports = (app) => {
             else 
                 return arr
         }, [])
-        console.log(missing)
         if(missing.length != 0) {
             return res.send({
                 success: false,
@@ -27,7 +26,6 @@ module.exports = (app) => {
         }
         newImage.save((err, image) => {
             if (err) { return res.send({success: false, message: 'Error: server error'});};
-            console.log(image);
             return res.send({
                 success: true,
                 message: 'iamge saved',
@@ -41,7 +39,6 @@ module.exports = (app) => {
         Image.find({
             _id: id
         }, (err, images) => {
-            console.log(images);
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             const image = images[0]
             if(!image) {return res.send({success: false, message: 'Error: no image'});};
