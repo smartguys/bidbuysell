@@ -8,7 +8,8 @@ class Product extends React.Component{
     render() {
         let {
             name,
-            description
+            description,
+            image
         } = this.props.listing
 
         return (
@@ -18,7 +19,7 @@ class Product extends React.Component{
                    
                     <Card.Body>
                         <Card.Title>{name}</Card.Title>
-                        <Card.Img variant="top" src="http://via.placeholder.com/640x360" />
+                        <Card.Img variant="top" src={(image)? image : "http://via.placeholder.com/640x360"} />
                         <Card.Text>
                         {description}
                 </Card.Text>
