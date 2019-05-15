@@ -39,7 +39,7 @@ const ListingSchema = new mongoose.Schema({
     friendDiscount: {
         type: Number,
         default: 0.0
-    }
+    },
     winner : {
         type: String,
         default: ''

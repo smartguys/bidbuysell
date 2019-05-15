@@ -103,23 +103,25 @@ module.exports = (app) => {
 					user1 = tmp;
 				}
 				//check that friendship exists
-				Friendship.findOne({
+				Friendship.find({
 						user1 : user1,
-						user2 : user2
-					},
-					(err, friendship) => {
-						if (err) {
+						user2 : user2,
+						isDelete : false
+					}, 
+					(err, friendships) => {
+                    	if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                    	if (!friendships[0]) {
 							return res.send({
 								success: true,
 								message: "success",
 								data: false
 							});
-						}
+                    	};
 						return res.send({
 							success: true,
 							message: "success",
 							data: true
-						});		
+						});
 					}
 				);
 			});
