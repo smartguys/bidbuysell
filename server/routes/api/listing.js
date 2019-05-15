@@ -4,6 +4,7 @@ let jwt = require('jsonwebtoken');
 let jwtProcess = require('../../jwt');
 const User = require('../../models/User')
 const Bid = require('../../models/Bid')
+const Transaction = require('../../models/Transaction')
 
 module.exports = (app) => {
     // create listing
@@ -42,7 +43,6 @@ module.exports = (app) => {
             if (err) { return res.send({ success: false, message: 'Error: no user' }); };
             newListing.save((err, listing) => {
                 if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                console.log(listing)
                 return res.send({
                     success: true,
                     message: "Listing created.",
@@ -71,28 +71,20 @@ module.exports = (app) => {
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if (!listing) { return res.send({ success: false, message: 'Error: no listing' }); };
-            Listing.findOneAndUpdate(
-                { _id: listing._id, },
-                { $set: { status: status } },
-                { returnOriginal: false },
-                (err, listing) => {
-                    console.log(status)
-                    console.log(err)
-                    console.log(listing.status)
-                    // the returnOriginal option doesnt see to work, 
-                    // where I want to return the modified object, so just respond 'success', for now.
-                    return res.send({
-                        success: true,
-                        message: 'success',
-                    })
-                }
-            )
+            listing.status = status; // change status
+            listing.save((err, listing) => {
+                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                return res.send({
+                    success: true,
+                    message: 'listing status updated',
+                    data: {listing}
+                })
+            })
         });
     })
     // show all listings, regardless of status
     app.get('/api/listing/all', (req,res,next) => {
         Listing.find({}, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
@@ -107,7 +99,6 @@ module.exports = (app) => {
         Listing.find({
             _id: id
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if (!listing) { return res.send({ success: false, message: 'Error: no listing' }); };
@@ -129,7 +120,6 @@ module.exports = (app) => {
         Listing.find({
             seller: id
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({success: false, message: 'Error: server error'});};
             return res.send({
                 success: true,
@@ -143,7 +133,6 @@ module.exports = (app) => {
         Listing.find({
             status: 'active'
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
@@ -161,7 +150,6 @@ module.exports = (app) => {
                 { $text: { $search: term } }
             ]
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             return res.send({
                 success: true,
@@ -184,18 +172,14 @@ module.exports = (app) => {
                 { status: 'active' }
             ]
         }, (err, listings) => {
-            console.log(listings)
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if(!listing) {return res.send({success: false, message: 'Error: no active listing'});};
-            
             User.find({ // check if buyer exists
                 _id: body['buyer']
             }, (err, users) => {
                 if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                 if (!users[0]) { return res.send({ success: false, message: 'Error: no user' }); };
-
-
                 if(listing.auction) { // check if auction
                     if(!body.price) { // check for price parameter
                         return res.send({success: false, message: 'Error: missing price on auction listing'});
@@ -215,18 +199,18 @@ module.exports = (app) => {
                         })
                     }
                 } else {
+                    if(body.price) { return res.send({ success: false, message: 'Error: cannot submit price for fixed-price listing' }); };
                     newBid.price = listing.price; // save new bid with current listing price
                     newBid.save((err, bid) => {
                         if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                        console.log(bid)
                         return res.send({
                             success: true,
                             message: "bid created for fixed-price listing",
-                            data: {bid}
+                            data: {listing, bid}
                         });
-                    })
-                }
-            })
+                    });
+                };
+            });
         });
-    })
+    });
 }
