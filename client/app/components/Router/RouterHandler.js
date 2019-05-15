@@ -20,6 +20,7 @@ import LeaveFeedback from '../Feedback/LeaveFeedback';
 import MyAccount from '../MyAccount/MyAccount';
 import App from '../App/App'
 import NotFound from '../App/NotFound'
+import Test from '../../Test';
 
 
 class RouterHandler extends Component {
@@ -80,6 +81,7 @@ class RouterHandler extends Component {
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
         <Route path="/myaccount" component={MyAccount}/>
+        <Route path="/test" component={Test}/>
         <Route component={NotFound}/>
       </Switch>
     </App>
