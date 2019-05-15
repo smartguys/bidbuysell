@@ -188,27 +188,44 @@ module.exports = (app) => {
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if(!listing) {return res.send({success: false, message: 'Error: no active listing'});};
-            if(listing.auction) // check if auction
-                if(!body.price) // check for price parameter
-                    return res.send({success: false, message: 'Error: missing price on auction listing'});
-                else
-                    newBid.price = body.price;
-            else
-                newBid.price = listing.price;
+            
             User.find({ // check if buyer exists
                 _id: body['buyer']
             }, (err, users) => {
                 if (err) { return res.send({ success: false, message: 'Error: server error' }); };
                 if (!users[0]) { return res.send({ success: false, message: 'Error: no user' }); };
-                newBid.save((err, bid) => {
-                    if (err) { return res.send({ success: false, message: 'Error: server error' }); };
-                    console.log(bid)
-                    return res.send({
-                        success: true,
-                        message: "Bid created.",
-                        data: { bid }
-                    });
-                })
+
+
+                if(listing.auction) { // check if auction
+                    if(!body.price) { // check for price parameter
+                        return res.send({success: false, message: 'Error: missing price on auction listing'});
+                    } else {
+                        newBid.price = body.price;
+                        listing.price = Math.max(listing.price, body.price);
+                        newBid.save((err, bid) => { // save newBid
+                            if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                            listing.save((err, listing) => { //update listing
+                                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                                return res.send({
+                                    success: true,
+                                    message: "auction listing updated with new bid",
+                                    data: {listing, bid}
+                                });
+                            })
+                        })
+                    }
+                } else {
+                    newBid.price = listing.price; // save new bid with current listing price
+                    newBid.save((err, bid) => {
+                        if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                        console.log(bid)
+                        return res.send({
+                            success: true,
+                            message: "bid created for fixed-price listing",
+                            data: {bid}
+                        });
+                    })
+                }
             })
         });
     })
