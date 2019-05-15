@@ -14,6 +14,10 @@ const NotificationSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now()
 	}
+	isDelete : {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = mongoose.model.('Notification', NotificationSchema);
