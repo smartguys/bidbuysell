@@ -204,7 +204,7 @@ app.post('/api/account/signin', (req, res, next) => {
         return res.send({
           success: true,
           message: "Added a justified complaint to the user.",
-          data: user.complaintCount;
+          data: user.complaintCount
         });
       });
     });
@@ -250,7 +250,7 @@ app.post('/api/account/signin', (req, res, next) => {
         return res.send({
           success: true,
           message: "Changed the user's rating.",
-          data: user;
+          data: user
         });
       });
     });
