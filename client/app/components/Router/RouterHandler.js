@@ -82,11 +82,8 @@ class RouterHandler extends Component {
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
         <Route path="/myaccount" component={MyAccount}/>
-<<<<<<< HEAD
         <Route path="/test" component={Test}/>
-=======
         <Route path="/admin" component={Admin}/>
->>>>>>> refs/remotes/origin/master
         <Route component={NotFound}/>
       </Switch>
     </App>
