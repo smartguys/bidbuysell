@@ -5,7 +5,6 @@ import Tabs from 'react-bootstrap/Tabs'
 import TabContainer from 'react-bootstrap/TabContainer'
 import TabPane from 'react-bootstrap/TabPane'
 
-//Could use just ID and Full Name as links to full info?
 
 class AppManagement extends Component {
 
@@ -22,7 +21,8 @@ class AppManagement extends Component {
     render() {
         return (
             <Container>
-                <h5>Pending Applications</h5>
+               <Row> <h3>Pending Applications</h3></Row>
+                
                 <Row>
                     <Col>
 
@@ -79,8 +79,8 @@ class AppManagement extends Component {
                                 </tr>
 
                                 <tr>
-<th>Credit Card</th>
-<td>app.credit</td>
+                                    <th>Credit Card</th>
+                                    <td>app.credit</td>
                                 </tr>
 
                             </tbody>
@@ -88,14 +88,14 @@ class AppManagement extends Component {
                         </Table>
                     </Col>
 
-                    <Col>
-                      
-                          <Row>  <Button variant="success" size="sm">Approve</Button>
-                          </Row>
-                          <Row><p></p></Row>
-                            <Row> <Button variant="danger" size="sm">Deny</Button>
-                            </Row>
-                      
+                    <Col className="ml-4">
+
+                        <Row>  <Button variant="success" size="sm">Approve</Button>
+                        </Row>
+                        <Row><p></p></Row>
+                        <Row> <Button variant="danger" size="sm">Deny</Button>
+                        </Row>
+
                     </Col>
 
                 </Row>

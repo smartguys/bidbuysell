@@ -6,9 +6,8 @@ import Tabs from 'react-bootstrap/Tabs'
 import AppManagement from './AppManagement';
 import UserManagement from './UserManagement';
 import ListingManagement from './ListingManagement';
-//import Messages from MyAccount;
 import TransactionsManagement from './TransactionsManagement';
-
+//import Messages from MyAccount;
 
 class Admin extends Component {
     constructor(props, context) {
@@ -31,6 +30,13 @@ class Admin extends Component {
                             <Nav.Item>
                                 <Nav.Link eventKey="users">Users</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="listings">Listings</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="transactions">Transactions</Nav.Link>
+                            </Nav.Item>
+
                         </Nav>
                     </Col>
                     <Col sm={9}>
@@ -40,6 +46,12 @@ class Admin extends Component {
                             </Tab.Pane>
                             <Tab.Pane eventKey="users">
                             <UserManagement/>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="listings">
+                                <ListingManagement/>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="transactions">
+                                <TransactionsManagement/>
                             </Tab.Pane>
                         </Tab.Content>
                     </Col>
