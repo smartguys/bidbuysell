@@ -182,5 +182,5 @@ app.post('/api/account/signin', (req, res, next) => {
         data: user.userName
       });
     });
-  }
+  });
 }
