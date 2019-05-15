@@ -26,7 +26,7 @@ const ComplaintSchema = new mongoose.Schema({
 	isResolved : {
 		type: Boolean,
 		default: false
-	}
+	},
 	isJustified : {
 		type: Boolean,
 		default: false
