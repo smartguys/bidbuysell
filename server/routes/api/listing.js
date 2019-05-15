@@ -71,19 +71,15 @@ module.exports = (app) => {
             if (err) { return res.send({ success: false, message: 'Error: server error' }); };
             const listing = listings[0]
             if (!listing) { return res.send({ success: false, message: 'Error: no listing' }); };
-            Listing.findOneAndUpdate(
-                { _id: listing._id, },
-                { $set: { status: status } },
-                { returnOriginal: false },
-                (err, listing) => {
-                    // the returnOriginal option doesnt see to work, 
-                    // where I want to return the modified object, so just respond 'success', for now.
-                    return res.send({
-                        success: true,
-                        message: 'success',
-                    })
-                }
-            )
+            listing.status = status; // change status
+            listing.save((err, listing) => {
+                if (err) { return res.send({ success: false, message: 'Error: server error' }); };
+                return res.send({
+                    success: true,
+                    message: 'listing status updated',
+                    data: {listing}
+                })
+            })
         });
     })
     // show all listings, regardless of status
