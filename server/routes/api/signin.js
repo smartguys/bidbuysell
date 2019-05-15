@@ -15,97 +15,97 @@ module.exports = (app) => {
             message: req.decoded
         });
     });
-    /*
-    * Sign up
-    */
-    app.post('/api/account/signup', (req, res, next) => {
-        const { body } = req;
-        const {
-            firstName,
-            lastName,
-            userName,
-            password
-        } = body;
-        let {
-            email
-        } = body;
+    // /*
+    // * Sign up
+    // */
+    // app.post('/api/account/signup', (req, res, next) => {
+    //     const { body } = req;
+    //     const {
+    //         firstName,
+    //         lastName,
+    //         userName,
+    //         password
+    //     } = body;
+    //     let {
+    //         email
+    //     } = body;
 
 
-        if (!firstName) {
-            return res.send({
-                success: false,
-                message: "Error. First name can't be blank."
-            });
-        }
-        if (!lastName) {
-            return res.send({
-                success: false,
-                message: "Error. Last name can't be blank."
-            });
-        }
-        if (!email) {
-            return res.send({
-                success: false,
-                message: "Error. Email can't be blank."
-            });
-        }
-        if (!userName) {
-            return res.send({
-                success: false,
-                message: "Error. Username can't be blank."
-            });
-        }
-        if (!password) {
-            return res.send({
-                success: false,
-                message: "Error. Password can't be blank."
-            });
-        }
+    //     if (!firstName) {
+    //         return res.send({
+    //             success: false,
+    //             message: "Error. First name can't be blank."
+    //         });
+    //     }
+    //     if (!lastName) {
+    //         return res.send({
+    //             success: false,
+    //             message: "Error. Last name can't be blank."
+    //         });
+    //     }
+    //     if (!email) {
+    //         return res.send({
+    //             success: false,
+    //             message: "Error. Email can't be blank."
+    //         });
+    //     }
+    //     if (!userName) {
+    //         return res.send({
+    //             success: false,
+    //             message: "Error. Username can't be blank."
+    //         });
+    //     }
+    //     if (!password) {
+    //         return res.send({
+    //             success: false,
+    //             message: "Error. Password can't be blank."
+    //         });
+    //     }
 
-        email = email.toLowerCase();
-        // steps 
-        // 1. verify email doesn't exist 
-        // 2. save
+    //     email = email.toLowerCase();
+    //     // steps 
+    //     // 1. verify email doesn't exist 
+    //     // 2. save
 
-        User.find({
-            email: email
-        }, (err, previousUsers) => {
-            if (err) {
-                res.end({
-                    success: false,
-                    message: "Server error."
-                });
-            }
-            else if (previousUsers.length > 0) {
-                res.end({
-                    success: false,
-                    message: "Account exists."
-                });
-            }
-            // save new user
-            else {
-                const newUser = new User();
-                newUser.email = email;
-                newUser.userName = userName;
-                newUser.firstName = firstName;
-                newUser.lastName = lastName;
-                newUser.password = newUser.generateHash(password);
-                newUser.save((err, user) => {
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: "Server error."
-                        });
-                    }
-                    return res.send({
-                        success: true,
-                        message: "Signed up."
-                    });
-                })
-            }
-        });
+    //     User.find({
+    //         email: email
+    //     }, (err, previousUsers) => {
+    //         if (err) {
+    //             res.end({
+    //                 success: false,
+    //                 message: "Server error."
+    //             });
+    //         }
+    //         else if (previousUsers.length > 0) {
+    //             res.end({
+    //                 success: false,
+    //                 message: "Account exists."
+    //             });
+    //         }
+    //         // save new user
+    //         else {
+    //             const newUser = new User();
+    //             newUser.email = email;
+    //             newUser.userName = userName;
+    //             newUser.firstName = firstName;
+    //             newUser.lastName = lastName;
+    //             newUser.password = newUser.generateHash(password);
+    //             newUser.save((err, user) => {
+    //                 if (err) {
+    //                     return res.send({
+    //                         success: false,
+    //                         message: "Server error."
+    //                     });
+    //                 }
+    //                 return res.send({
+    //                     success: true,
+    //                     message: "Signed up."
+    //                 });
+    //             })
+    //         }
+    //     });
 
-    });
+    // });
 
     /*
     * Signin 
