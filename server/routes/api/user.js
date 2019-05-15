@@ -170,8 +170,23 @@ app.post('/api/account/signin', (req, res, next) => {
 
 });
   
+  //get user from userid
+  app.get('/api/account/get/username/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user
+      });
+    });
+  });
+
   //get username from userid
-  app.get('/api/account/username/:userid', (req, res, next) => {
+  app.get('/api/account/get/username/:userid', (req, res, next) => {
     const userid = req.params.userid;
     User.findOne({
       _id: userid
@@ -186,7 +201,7 @@ app.post('/api/account/signin', (req, res, next) => {
   });
 
   //increment complaint count against user
-  app.post('/api/account/complain/:userid', (req, res, next) => {
+  app.post('/api/account/set/complaintcount/:userid', (req, res, next) => {
     const userid = req.params.userid;
     User.findOne({
       _id: userid
@@ -204,14 +219,14 @@ app.post('/api/account/signin', (req, res, next) => {
         return res.send({
           success: true,
           message: "Added a justified complaint to the user.",
-          data: user.complaintCount;
+          data: user.complaintCount
         });
       });
     });
   });
 
   //get complaintcount from userid
-  app.get('/api/account/complaintcount/:userid', (req, res, next) => {
+  app.get('/api/account/get/complaintcount/:userid', (req, res, next) => {
     const userid = req.params.userid;
     User.findOne({
       _id: userid
@@ -226,7 +241,7 @@ app.post('/api/account/signin', (req, res, next) => {
   });
 
   //modify user rating
-  app.post('/api/account/setrating/:userid', (req, res, next) => {
+  app.post('/api/account/set/rating/:userid', (req, res, next) => {
     const userid = req.params.userid;
     const {body} = req;
     //check that rating is sent
@@ -250,14 +265,14 @@ app.post('/api/account/signin', (req, res, next) => {
         return res.send({
           success: true,
           message: "Changed the user's rating.",
-          data: user;
+          data: user
         });
       });
     });
   });
 
   //get rating from userid
-  app.get('/api/account/rating/:userid', (req, res, next) => {
+  app.get('/api/account/get/rating/:userid', (req, res, next) => {
     const userid = req.params.userid;
     User.findOne({
       _id: userid
@@ -271,4 +286,53 @@ app.post('/api/account/signin', (req, res, next) => {
     });
   });
 
+  //get status from userid
+  app.get('/api/account/get/status/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user.status
+      });
+    });
+  });
+
+  //modify user rating
+  app.post('/api/account/set/status/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    const {body} = req;
+    //check that status is sent
+    if (!body['status']) {return res.send({success: false, message: 'Error: no status'});}
+    const status = body['status'];
+    //check that status is valid
+    const statusArray = ["firstTime", "active", "suspended", "appealing", "disabled"];
+    var isValid = false;
+    for (var i=0; i<statusArray.length; i++) {
+      if (statusArray[i] == status) {
+        isValid = true;
+        break;
+      }
+    }
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      //set and save
+      user.status = status;
+      user.save((err, user) => {
+        if (err) {
+          return res.send({success: false, message: 'Error: server error'});
+        }
+        return res.send({
+          success: true,
+          message: "Changed the user's rating.",
+          data: user
+        });
+      });
+    });
+  });
 }
