@@ -12,7 +12,7 @@ module.exports = (app) => {
         const { body } = req; 
         let newUser = new User(); 
         params = [
-            'firstName' ,
+            'firstName',
             'lastName', 
             'email', 
             'userName',
@@ -163,4 +163,17 @@ module.exports = (app) => {
 
     });
 
+  app.get('/api/account/username/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user.userName
+      });
+    });
+  }
 }
