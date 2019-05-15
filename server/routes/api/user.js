@@ -169,7 +169,8 @@ app.post('/api/account/signin', (req, res, next) => {
     })
 
 });
-
+  
+  //get username from userid
   app.get('/api/account/username/:userid', (req, res, next) => {
     const userid = req.params.userid;
     User.findOne({
@@ -183,4 +184,47 @@ app.post('/api/account/signin', (req, res, next) => {
       });
     });
   });
+
+  //increment complaint count against user
+  app.post('/api/account/complain/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      user.complaintCount++;
+      //two complaints = 1 warning, vips must have 0 warnings
+      if (user.isVip && user.complaintCount >= 2) {
+        user.isVip = false;
+      }
+      user.save((err, user) => {
+        if (err) {
+          return res.send({success: false, message: 'Error: server error'});
+        }
+        return res.send({
+          success: true,
+          message: "Added a justified complaint to the user.",
+          data: user.complaintCount;
+        });
+      });
+    });
+  });
+
+  //get complaintcount from userid
+  app.get('/api/account/complaintcount/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user.complaintcount
+      });
+    });
+  });
+
+
+
 }

@@ -56,8 +56,16 @@ const UserSchema = new mongoose.Schema({
     default: false
   },
   isDelete: {
-      type: Boolean,
-      default: false
+    type: Boolean,
+    default: false
+  },
+  complaintCount: {
+    type: Number,
+    default: 0
+  },
+  totalMoneySpent: {
+    type: Number,
+    default: 0
   }
 });
 
