@@ -1,8 +1,6 @@
 const Feedback = require('../../models/Feedback');
 const User = require('../../models/User');
 
-const request = require('request');
-
 module.exports = (app) => {
 	//create feedback
 	app.post('/api/feedback/create', (req,res,next) => {
@@ -126,110 +124,4 @@ module.exports = (app) => {
 			});
 		});
 	});
-
-
-
-	app.get('/test', (req,res,next) => {
-		console.log('?');
-		var u1 = new User();
-		var u2 = new User();
-		var u3 = new User();
-		var f;
-
-		request.post(
-		    'http://localhost:8080/api/feedback/create',
-		    { json: { reviewer : u1,
-		    		  userReviewed : u3,
-		    		  content : "U1 reviewing U3 first time",
-		    		  rating : 2
-		    		} 
-		    },
-		    function (error, response, body) {
-		        console.log("1");
-		        console.log(body);
-		        console.log("1");
-		        f = body.data._id;
-		    }
-		);
-
-		setTimeout( function() {
-			request.post(
-			    'http://localhost:8080/api/feedback/create',
-			    { json: { reviewer : u1,
-			    		  userReviewed : u2,
-			    		  content : "U1 REVIEWING U2",
-			    		  rating : 1
-			    		} 
-			    },
-			    function (error, response, body) {
-			        console.log("2");
-			        console.log(body);
-			        console.log("2");
-			    }
-			);
-		}, 3000);
-
-		setTimeout( function() {
-			request.post(
-			    'http://localhost:8080/api/feedback/create',
-			    { json: { reviewer : u2,
-			    		  userReviewed : u3,
-			    		  content : "U2 REVIEWING U3",
-			    		  rating : 4
-			    		} 
-			    },
-			    function (error, response, body) {
-			        console.log("3");
-			        console.log(body);
-			        console.log("3");
-			    }
-			);
-		}, 6000);
-
-		setTimeout( function() {
-			request.post(
-			    'http://localhost:8080/api/feedback/update/'+f,
-			    { json: { content : "U1 REVIEWING U3 AGAIN",
-			    		  rating : 5
-			    		} 
-			    },
-			    function (error, response, body) {
-			        console.log("4");
-			        console.log(body);
-			        console.log("4");
-			    }
-			);
-		}, 9000);
-
-		setTimeout( function() {
-			request.post(
-			    'http://localhost:8080/api/feedback/delete/'+f,
-			    { json: { 
-			    		} 
-			    },
-			    function (error, response, body) {
-			        console.log("5");
-			        console.log(body);
-			        console.log("5");
-			    }
-			);
-		}, 12000);
-
-		setTimeout( function() {
-			request.get(
-			    'http://localhost:8080/api/feedback/'+u3._id,
-			    { json: { 
-			    		} 
-			    },
-			    function (error, response, body) {
-			        console.log("6");
-			        console.log(body);
-			        console.log("6");
-			    }
-			);
-		}, 15000);
-	});
-
-
-
 }

@@ -116,7 +116,7 @@ module.exports = (app) => {
 			},
 			(err, notif) => {
 				if (err) {return res.send({success: false, message: 'Error: no notification'});}
-				//replace content and save
+				//delete and save
 				notif.isDelete = true;
 				notif.save( (err, notif) => {
 					if (err) {
