@@ -170,4 +170,17 @@ app.post('/api/account/signin', (req, res, next) => {
 
 });
 
+  app.get('/api/account/username/:userid', (req, res, next) => {
+    const userid = req.params.userid;
+    User.findOne({
+      _id: userid
+    }, (err, user) => {
+      if (err) {return res.send({success: false, message: 'Error: no user'});}
+      return res.send({
+        success: true,
+        message: "success",
+        data: user.userName
+      });
+    });
+  }
 }

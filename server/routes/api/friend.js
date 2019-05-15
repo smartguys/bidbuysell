@@ -133,6 +133,7 @@ module.exports = (app) => {
 		User.findOne({
 			_id: userid
 		}, (err, user) => {
+			if (err) {return res.send({success: false, message: 'Error: no user'});}
 			var friends = [];
 			//user is the first friend
 			Friendship.find({
