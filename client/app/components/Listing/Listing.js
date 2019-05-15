@@ -11,7 +11,7 @@ class Listing extends React.Component {
         super(props);
         console.log(this.props.match.params.id)
     }
-    
+
     render() {
         return (
             <Container fluid={true}>

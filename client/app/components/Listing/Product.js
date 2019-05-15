@@ -18,8 +18,6 @@ class Product extends React.Component{
                    
                     <Card.Body>
                         <Card.Title>{name}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">Product Subtitle</Card.Subtitle>
-
                         <Card.Img variant="top" src="http://via.placeholder.com/640x360" />
                         <Card.Text>
                         {description}
@@ -30,12 +28,6 @@ class Product extends React.Component{
             </CardGroup>
         
 
-
-
-    // {  <div>
-          //  <h3>Product Name</h3>
-           // <h4>Subtitle</h4>          
-           //</div> } 
  
         )
     }
