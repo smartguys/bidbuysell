@@ -33,7 +33,32 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
+        // console.log(this.props)
+        axios.get('/api/account/get/username/'+ this.props.userId).then(res => {
+            switch (res.data.success) {
+                case true:
+                    const user = res.data.data
+                    console.log('user')
+                    console.log(user)
+                    this.setState({
+                        // user: res.data.data,
+                        email: user.email,
+                        userName: user.userName,
+                        phone: user.phone,
+                        street: user.street,
+                        city: user.city,
+                        state: user.state,
+                        zip: user.zip,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        creditCard: user.creditCard
+                    })
+                    break;
+                case false:
+                    // console.log(res.data.message);
+                    break;
+            }
+        })
     }
 
     handleCallback = ({ issuer }, isValid) => {
@@ -102,6 +127,14 @@ class Profile extends Component {
             )
         }
 
+        // console.log(this.state.user)
+        // const user = this.state.user
+
+
+        //                 ? this.state.user
+        //                 : {}
+        console.log('state')
+        console.log(this.state)
         return (
             <Container>
                 <Row className="mt-5 justify-content-center">
@@ -121,42 +154,42 @@ class Profile extends Component {
                                 <Form.Label>Name</Form.Label>
                                 <Row>
                                     <Col>
-                                        <Form.Control onChange={this.change} name="firstName" placeholder="First name" />
+                                        <Form.Control onChange={this.change} name="firstName" defaultValue={this.state.firstName} />
                                     </Col>
                                     <Col>
-                                        <Form.Control  onChange={this.change} name="lastName" placeholder="Last name" />
+                                        <Form.Control  onChange={this.change} name="lastName" defaultValue={this.state.lastName} />
                                     </Col>
                                 </Row>
 
                             </Form.Group>
                             <Form.Group controlId="formGroupEmail">
                                 <Form.Label>Email address</Form.Label>
-                                <Form.Control  onChange={this.change} name="email" type="email" placeholder="Enter email" />
+                                <Form.Control  onChange={this.change} name="email" type="email" defaultValue={this.state.email} />
                             </Form.Group>
                             <Form.Group controlId="formGroupUsername">
                                 <Form.Label>Username</Form.Label>
-                                <Form.Control onChange={this.change} name="userName" type="text" placeholder="Username" />
+                                <Form.Control onChange={this.change} name="userName" type="text" defaultValue={this.state.userName} />
                             </Form.Group>
                             <Form.Group controlId="formGroupPhone">
                                 <Form.Label>Phone</Form.Label>
-                                <Form.Control onChange={this.change} name="phone" type="number" placeholder="Phone" />
+                                <Form.Control onChange={this.change} name="phone" type="number" defaultValue={this.state.phone} />
                             </Form.Group>
                             <Form.Group controlId="formGroupUsername">
                                 <Form.Label>Address</Form.Label>
-                                <Form.Control onChange={this.change} name="street" type="text" placeholder="Address" />
+                                <Form.Control onChange={this.change} name="street" type="text" defaultValue={this.state.street} />
                             </Form.Group>
                             <Row>
                                 <Col>
                                     <Form.Group controlId="formGroupName">
                                         <Form.Label>City</Form.Label>
-                                        <Form.Control onChange={this.change} name="city" placeholder="City" />
+                                        <Form.Control onChange={this.change} name="city" defaultValue={this.state.city} />
                                     </Form.Group>
 
                                 </Col>
                                 <Col>
                                     <Form.Group controlId="exampleForm.ControlSelect1">
                                         <Form.Label>State</Form.Label>
-                                        <Form.Control onChange={this.change} name="state" as="select">
+                                        <Form.Control onChange={this.change} name="state" as="select" defaultValue={this.state.state}>
                                             <option>NY</option>
                                             <option>2</option>
                                             <option>3</option>
@@ -170,7 +203,7 @@ class Profile extends Component {
                                 <Col>
                                     <Form.Group controlId="formGroupZip">
                                         <Form.Label>Zip Code</Form.Label>
-                                        <Form.Control onChange={this.change} name="zip" placeholder="Zip Code" />
+                                        <Form.Control onChange={this.change} name="zip" defaultValue={this.state.zip} />
                                     </Form.Group>
 
                                 </Col>
@@ -194,7 +227,7 @@ class Profile extends Component {
                         </Row>
                             <Form.Group controlId="formGroupNumber">
                                 <Form.Label>Credit Card Number</Form.Label>
-                                <Form.Control name="number" type="text" placeholder="Card Number" onChange={this.change} />
+                                <Form.Control name="number" type="text" defaultValue={this.state.creditCard} onChange={this.change} />
                             </Form.Group>
 
                             <Form.Group controlId="formGroupNumber">
@@ -227,7 +260,7 @@ class Profile extends Component {
                 </Row>
                 
                 <Row className="justify-content-center">
-                    <Button type="submit"  style={{ marginLeft: '5px' }} variant="primary">Submit Application</Button>
+                    <Button type="submit"  style={{ marginLeft: '5px' }} variant="primary">Submit Updates</Button>
                 </Row>
                 </Form>
                 

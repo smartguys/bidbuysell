@@ -74,6 +74,9 @@ class RouterHandler extends Component {
         userID
       } = this.state; 
 
+      console.log('router')
+      console.log(userID)
+
     return(
     <Router>
     <App userName={userName} login={this.login} logout={this.logout}>
@@ -86,7 +89,7 @@ class RouterHandler extends Component {
         <Route path="/search" component={SearchResults}/>
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
-        <Route path="/myaccount" render={(props) => <MyAccount {...props} userID={userID}/>}/>
+        <Route path="/myaccount" render={(props) => <MyAccount {...props} userId={userID}/>}/>
         <Route path="/test" component={Test}/>
         <Route path="/admin" component={Admin}/>
         <Route component={NotFound}/>

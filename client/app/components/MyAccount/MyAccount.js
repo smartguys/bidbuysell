@@ -16,6 +16,7 @@ class MyAccount extends React.Component {
     }
 
     render() {
+        console.log('myaccount')
         console.log(this.props)
         return (
             <Tab.Container id="account" defaultActiveKey="overview">
