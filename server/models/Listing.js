@@ -40,6 +40,10 @@ const ListingSchema = new mongoose.Schema({
         type: Number,
         default: 0.0
     }
+    winner : {
+        type: String,
+        default: ''
+    }
 });
 
 ListingSchema.index({
