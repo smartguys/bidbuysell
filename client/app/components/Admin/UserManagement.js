@@ -1,31 +1,35 @@
 import React, { Component } from 'react';
 import { Col, Row, Button, InputGroup, FormControl, Container, Table } from 'react-bootstrap';
+import Feedback from 'react-bootstrap/Feedback';
+import Rating from 'react-rating';
 
 class UserManagement extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     }
-        
-        //td format should be: <td>{user.id}</td>
-        //.map((user, index))=> {
-        //<tr key={index}>
-        //<th scope="row">{index + 1}</th>
-        
-//Need Accordian kind of table of users. Cards?
 
-            render() {
-                return (
-                    <Container>
-                        <h5>Users</h5>
-                        <Row>
+    //td format should be: <td>{user.id}</td>
+    //.map((user, index))=> {
+    //<tr key={index}>
+    //<th scope="row">{index + 1}</th>
+
+    //Need Accordian kind of table of users. Cards?
+
+    render() {
+        return (
+            <Container>
+                <h3>Users</h3>
+              
+                <Row>
                     <Col>
 
                         <Table responsive>
                             <tbody>
                                 <tr>
-                                    <th>Date</th>
-                                    <td>app.date</td>
+                                    <th>Username</th>
+                                    <td>app.username</td>
                                 </tr>
+
                                 <tr>
                                     <th>First Name</th>
                                     <td>app.firstName</td>
@@ -35,12 +39,6 @@ class UserManagement extends Component {
                                     <th>Last Name</th>
                                     <td>app.lastName</td>
                                 </tr>
-
-                                <tr>
-                                    <th>Username</th>
-                                    <td>app.username</td>
-                                </tr>
-
 
                                 <tr>
                                     <th>Email</th>
@@ -82,35 +80,38 @@ class UserManagement extends Component {
                         </Table>
                     </Col>
 
-                    <Col>
-
-                        <Row>  <Button variant="success" size="sm">Approve</Button>
+                    <Col className="ml-4">
+                        <Row>
+                            <Rating></Rating>
+                        </Row>
+                        <Row></Row>
+                        <Row> <Button variant="warning" size="sm">Suspend</Button>
                         </Row>
                         <Row><p></p></Row>
-                        <Row> <Button variant="danger" size="sm">Deny</Button>
+                        <Row> <Button variant="danger" size="sm">Block</Button>
                         </Row>
 
                     </Col>
 
                 </Row>
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                     
-                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </Container>
         )
     }

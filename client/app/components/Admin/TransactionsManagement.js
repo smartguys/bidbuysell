@@ -1,15 +1,30 @@
 import React, { Component } from 'react';
-import { Col, Row, Button, InputGroup, FormControl } from 'react-bootstrap'
+import {Container, Col, Row, Button, InputGroup, Form, FormControl } from 'react-bootstrap'
 
 class TransactionsManagement extends Component {
     render() {
         return (
             <Container>
                 <Row>
-                   Transactions
+                    <h3>Transaction History</h3>
                 </Row>
+
+                <Row>
+                    <Form>
+                        <Form.Group as={Row}>
+                            <Form.Label column sm="2">
+                                User:
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control />
+                            </Col>
+                        </Form.Group>
+                    </Form>
+                </Row>
+
+                <Row></Row>
             </Container>
         )
     }
 }
-    export default TransactionsManagement;
+export default TransactionsManagement;

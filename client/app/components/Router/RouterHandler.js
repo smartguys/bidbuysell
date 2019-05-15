@@ -18,6 +18,7 @@ import SearchResults from '../SearchResults/SearchResults';
 import IndivudalListing from '../SearchResults/IndividualListing';
 import LeaveFeedback from '../Feedback/LeaveFeedback';
 import MyAccount from '../MyAccount/MyAccount';
+import Admin from '../Admin/Admin';
 import App from '../App/App'
 import NotFound from '../App/NotFound'
 import Test from '../../Test';
@@ -81,7 +82,11 @@ class RouterHandler extends Component {
         <Route path="/individual" component={IndivudalListing}/>
         <Route path="/feedback" component={LeaveFeedback}/>
         <Route path="/myaccount" component={MyAccount}/>
+<<<<<<< HEAD
         <Route path="/test" component={Test}/>
+=======
+        <Route path="/admin" component={Admin}/>
+>>>>>>> refs/remotes/origin/master
         <Route component={NotFound}/>
       </Switch>
     </App>
