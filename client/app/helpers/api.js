@@ -17,8 +17,27 @@ module.exports.signin = (username, password, callback) => {
     })
 }
 
+module.exports.uploadImage = (name, data, callback) => {
+    console.log('upload image');
+    axios.post(
+        base_url + 'image/upload',
+        {
+            name: name,
+            data: data
+        }
+    ).then(res => {
+        callback(res.data)
+    }).catch(err => {
+        callback({ success: false, message: 'Error: could not reach backend'})
+    })
+}
+
 // TEST:
 
 // module.exports.signin('a', 'b', (res) => {
+//     console.log(res)
+// })
+
+// module.exports.uploadImage('ok', 'go', (res) => {
 //     console.log(res)
 // })

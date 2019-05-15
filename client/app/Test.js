@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { uploadImage } from '../app/helpers/api'
+
 class Test extends Component {
     constructor(props) {
         super(props);
@@ -8,7 +10,7 @@ class Test extends Component {
         }
     }
 
-    handleInput = (e) => {
+    inputHandler = (e) => {
         console.log('handle input')
         console.log(e)
         console.log(e.target.files)
@@ -28,11 +30,19 @@ class Test extends Component {
         }
     }
 
+    submitHandler = (e) => {
+        console.log('submit')
+        uploadImage('filename', this.state.src, res => {
+            console.log(res)
+        })
+    }
+
     render() {
         return (
             <div>
-                <input type={'file'} onChange={this.handleInput} />
+                <input type={'file'} onChange={this.inputHandler} />
                 <img id={'blah'} src={this.state.src} alt={'alt'}/>
+                <button onClick={this.submitHandler}>submit</button>
             </div>
         )
     }
