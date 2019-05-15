@@ -55,7 +55,8 @@ class Listing extends React.Component {
         }).then( res => {
             switch(res.data.success) {
                 case true:
-                    console.log(true);
+                    console.log(res.data);
+                    this.getListing()
                     break;
                 case false:
                     console.log(false); 
@@ -104,7 +105,7 @@ class Listing extends React.Component {
                         <Row><Countdown renderer={renderer} date={endtime}>
                             </Countdown></Row>
                         <Row className="mt-3">
-                            <BidAmount change={this.change} submit={this.submit} listing={listing}></BidAmount>
+                            <BidAmount change={this.change} submit={this.submit} listing={listing} bids={bids}></BidAmount>
                         </Row>
                     </Col>
                 </Row>
