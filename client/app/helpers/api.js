@@ -32,6 +32,19 @@ module.exports.uploadImage = (name, data, callback) => {
     })
 }
 
+module.exports.getImage = (id, callback) => {
+    console.log('get image');
+    console.log(base_url + 'image/id/' + id)
+    axios.get(
+        base_url + 'image/id/' + id,
+        {}
+    ).then(res => {
+        callback(res.data)
+    }).catch(err => {
+        callback({ success: false, message: 'Error: could not reach backend'})
+    })
+}
+
 // TEST:
 
 // module.exports.signin('a', 'b', (res) => {
@@ -41,3 +54,7 @@ module.exports.uploadImage = (name, data, callback) => {
 // module.exports.uploadImage('ok', 'go', (res) => {
 //     console.log(res)
 // })
+
+// module.exports.getImage('5cdb6e74d245663c6922e229', (res => {
+//     console.log(res)
+// }))
