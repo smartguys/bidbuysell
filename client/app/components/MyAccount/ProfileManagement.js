@@ -5,7 +5,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 import axios from 'axios'
 // import Confirmation from './Confirmation'
 
-class Profile extends Component {
+class ProfileManagement extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -273,4 +273,4 @@ class Profile extends Component {
     }
 }
 
-export default Profile; 
+export default ProfileManagement; 

@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { Col, Row, Button, InputGroup, FormControl, Nav, Tab, Container } from 'react-bootstrap';
 import Tabs from 'react-bootstrap/Tabs'
 import axios from 'axios'
-import Profile from './Profile';
+import ProfileManagement from './ProfileManagement';
+import BuyingManagement from './BuyingManagement';
+import SellingManagement from './SellingManagement'
 
 // Where we start: My Account Overview Page
 class MyAccount extends React.Component {
@@ -47,16 +49,18 @@ class MyAccount extends React.Component {
                         <Tab.Content>
                             <Tab.Pane eventKey="profile">
                                 {/* <Overview /> */}
-                                <Profile userId={this.props.userId}/>
+                                <ProfileManagement userId={this.props.userId}/>
                             </Tab.Pane>
                             
                             
                             <Tab.Pane eventKey="buying">
                                 {/* <Buying /> */}
+                                <BuyingManagement userId={this.props.userId}/>
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="selling">
                                 {/* <Selling /> */}
+                                <SellingManagement userId={this.props.userId} />
                             </Tab.Pane> 
                             
                             <Tab.Pane eventKey="messages">

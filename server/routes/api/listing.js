@@ -200,7 +200,7 @@ module.exports = (app) => {
                         })
                     }
                 } else {
-                    if(body.price) { return res.send({ success: false, message: 'Error: cannot submit price for fixed-price listing' }); };
+                    // if(body.price) { return res.send({ success: false, message: 'Error: cannot submit price for fixed-price listing' }); };
                     newBid.price = listing.price; // save new bid with current listing price
                     newBid.save((err, bid) => {
                         if (err) { return res.send({ success: false, message: 'Error: server error' }); };
