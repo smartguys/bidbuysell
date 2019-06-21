@@ -1,5 +1,17 @@
 # BidBuySell Powered by MERN Stack
 
+A web platform for auctioning, buying and selling items, with pecial twists:
+- Only the second-highest bid wins the auction
+- All user applications must be approved by and Admin
+- All items for auction/sale must be approved by an Admin
+
+Features:
+- 
+- Administraion panel
+- Threaded group messaging
+- Dispute filing and management
+- Bad/Dirty word list filter
+
 This is a project using the following technologies:
 - [React](https://facebook.github.io/react/) and [React Router](https://reacttraining.com/react-router/) for the frontend
 - [Express](http://expressjs.com/) and [Mongoose](http://mongoosejs.com/) for the backend
