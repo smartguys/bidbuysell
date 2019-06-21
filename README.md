@@ -1,6 +1,6 @@
 # BidBuySell Powered by MERN Stack
 
-A web platform for auctioning, buying and selling items, with pecial twists:
+A web platform for auctioning, buying and selling items, with special twists:
 - Only the second-highest bid wins the auction
 - All user applications must be approved by and Admin
 - All items for auction/sale must be approved by an Admin
