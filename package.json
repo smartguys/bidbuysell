@@ -22,7 +22,7 @@
     "@babel/preset-react": "^7.0.0-beta.42",
     "add-subtract-date": "^1.0.14",
     "autoprefixer": "^8.2.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-loader": "^8.0.0-beta.2",
     "bcrypt": "^3.0.6",
     "bootstrap": "^4.3.1",
